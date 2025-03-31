@@ -7,4 +7,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+<p><a href="https://github.com/PHAMTHANHPHUOC/Nhom4_FE_NFC.git">Link github FE : https://github.com/PHAMTHANHPHUOC/Nhom4_FE_NFC.git</a></p>
+
 

@@ -57,9 +57,26 @@ class NhanVienController extends Controller
         return response()->json([
             'message' => 'Đăng nhập thành công',
             'data' => [
-                'token' => $token,
+                'chia_khoa' => $token,
                 'token_type' => 'Bearer'
             ]
         ]);
+    }
+
+    public function kiemTraChiaKhoa()
+    {
+        $check = Auth::guard('sanctum')->user();
+
+        if ($check) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Ok, bạn có thể đi qua!',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Bạn chưa đăng nhập!',
+            ]);
+        }
     }
 }

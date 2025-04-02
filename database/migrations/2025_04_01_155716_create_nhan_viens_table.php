@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('ma_chuc_danh')->nullable();
             $table->boolean('trang_thai');
             $table->string("loai_hop_dong");
+            $table->boolean("is_master")->default(false);
             $table->timestamps();
         });
     }

@@ -32,7 +32,7 @@ class NhanVienController extends Controller
         ], 201);
     }
 
-    public function dangNhap(Request $request)
+    public function  dangNhap(Request $request)
     {
         // Validate request
         $request->validate([

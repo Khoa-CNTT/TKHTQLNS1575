@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('nhan_viens', function (Blueprint $table) {
             $table->id(); // Primary Key
-            $table->integer('ma_vai_tro')->nullable(); // Foreign Key
+            $table->integer('id_vai_tro')->nullable(); // Foreign Key
             $table->string('ho_va_ten');
             $table->date('ngay_sinh');
             $table->boolean('gioi_tinh');
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('password');
             $table->date('ngay_tuyen_dung');
-            $table->integer('ma_phong_ban')->nullable(); // Foreign Key
-            $table->integer('ma_chuc_danh')->nullable();
+            $table->integer('id_phong_ban')->nullable(); // Foreign Key
+            $table->integer('id_chuc_danh')->nullable();
             $table->boolean('trang_thai');
             $table->string("loai_hop_dong");
             $table->boolean("is_master")->default(false);

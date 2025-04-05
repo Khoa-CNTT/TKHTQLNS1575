@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NhanVienRequest;
 use App\Models\NhanVien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class NhanVienController extends Controller
 {
     public function dangKyNhanVien(Request $request)
     {
+
         $nhanVien = NhanVien::create([
             "ma_vai_tro" => $request->ma_vai_tro,
             "ho_va_ten" => $request->ho_va_ten,
@@ -34,12 +37,15 @@ class NhanVienController extends Controller
 
     public function  dangNhap(Request $request)
     {
-        // Validate request
+        // Validate request with Vietnamese messages
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-        ]);
+        ], [
+            'email.required' => 'Email không được để trống',
+            'email.email' => 'Email không đúng định dạng',
 
+        ]);
         // Find the user by email
         $nhanVien = NhanVien::where('email', $request->email)->first();
 
@@ -49,10 +55,8 @@ class NhanVienController extends Controller
                 'message' => 'Đăng nhập thất bại',
             ], 401);
         }
-
         // Create token
         $token = $nhanVien->createToken('auth_token')->plainTextToken;
-
         // Return response with token
         return response()->json([
             'message' => 'Đăng nhập thành công',
@@ -76,6 +80,25 @@ class NhanVienController extends Controller
             return response()->json([
                 'status' => 401,
                 'message' => 'Bạn chưa đăng nhập!',
+            ]);
+        }
+    }
+
+    public function dangXuat(Request $request)
+    {
+        $nhan_vien = Auth::guard('sanctum')->user();
+        if ($nhan_vien) {
+            DB::table('personal_access_tokens')
+                ->where('id', $nhan_vien->currentAccessToken()->id)->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => "Đã đăng xuất thiết bị này thành công"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Vui lòng đăng nhập"
             ]);
         }
     }

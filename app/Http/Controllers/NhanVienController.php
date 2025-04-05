@@ -15,7 +15,7 @@ class NhanVienController extends Controller
     {
 
         $nhanVien = NhanVien::create([
-            "ma_vai_tro" => $request->ma_vai_tro,
+            "id_vai_tro" => $request->id_vai_tro,
             "ho_va_ten" => $request->ho_va_ten,
             "ngay_sinh" => $request->ngay_sinh,
             "gioi_tinh" => $request->gioi_tinh,
@@ -23,8 +23,8 @@ class NhanVienController extends Controller
             "email" => $request->email,
             "password" => bcrypt($request->password),
             "ngay_tuyen_dung" => $request->ngay_tuyen_dung,
-            "ma_phong_ban" => $request->ma_phong_ban,
-            "ma_chuc_danh" => $request->ma_chuc_danh,
+            "id_phong_ban" => $request->id_phong_ban,
+            "id_chuc_danh" => $request->id_chuc_danh,
             "trang_thai" => $request->trang_thai,
             "loai_hop_dong" => $request->loai_hop_dong,
             "is_master" => $request->is_master,
@@ -44,8 +44,9 @@ class NhanVienController extends Controller
         ], [
             'email.required' => 'Email không được để trống',
             'email.email' => 'Email không đúng định dạng',
-
+            'password.required' => 'Mật khẩu không được để trống',
         ]);
+
         // Find the user by email
         $nhanVien = NhanVien::where('email', $request->email)->first();
 
@@ -62,9 +63,10 @@ class NhanVienController extends Controller
             'message' => 'Đăng nhập thành công',
             'data' => [
                 'chia_khoa' => $token,
-                'token_type' => 'Bearer'
-            ]
-        ]);
+                'token_type' => 'Bearer',
+            ],
+            "status" => 200,
+        ], 200);
     }
 
     public function kiemTraChiaKhoa()
@@ -80,7 +82,7 @@ class NhanVienController extends Controller
             return response()->json([
                 'status' => 401,
                 'message' => 'Bạn chưa đăng nhập!',
-            ]);
+            ], 401);
         }
     }
 
@@ -97,9 +99,9 @@ class NhanVienController extends Controller
             ]);
         } else {
             return response()->json([
-                'status' => false,
+                'status' => 401,
                 'message' => "Vui lòng đăng nhập"
-            ]);
+            ], 401);
         }
     }
 }

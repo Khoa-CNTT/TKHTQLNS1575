@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BangChucDanhController;
 use App\Http\Controllers\NhanVienController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,10 @@ Route::post("/dang-nhap", [NhanVienController::class, "dangNhap"]);
 Route::post('/kiem-tra-chia-khoa', [NhanVienController::class, 'kiemTraChiaKhoa']);
 
 Route::get('/dang-xuat', [NhanVienController::class, 'dangXuat']);
+
+
+Route::get("/get-bang-chuc-danh", [BangChucDanhController::class, 'getBangChucDanh']);
+Route::post("/create-bang-chuc-danh", [BangChucDanhController::class, 'createBangChucDanh']);
+Route::put("/update-bang-chuc-danh", [BangChucDanhController::class, 'updateBangChucDanh']);
+Route::delete("/delete-bang-chuc-danh/{id}", [BangChucDanhController::class, 'deleteBangChucDanh']);
+Route::get("/get-bang-chuc-danh-chi-tiet/{id}", [BangChucDanhController::class, 'getBangChucDanhChiTiet']);

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id("id_chuc_danh");
             $table->string("ten_chuc_danh");
             $table->double("ban_luong");
-            $table->boolean("trang_thai");
+            $table->integer("trang_thai");
             $table->timestamps();
         });
     }

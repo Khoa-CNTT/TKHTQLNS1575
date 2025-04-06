@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('ngay_tuyen_dung');
             $table->integer('id_phong_ban')->nullable(); // Foreign Key
             $table->integer('id_chuc_danh')->nullable();
-            $table->boolean('trang_thai');
+            $table->integer('trang_thai');
             $table->string("loai_hop_dong");
             $table->boolean("is_master")->default(false);
             $table->timestamps();

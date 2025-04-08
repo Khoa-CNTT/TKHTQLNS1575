@@ -22,7 +22,7 @@ class BangChucDanhController extends Controller
             $query->where('bang_chuc_danhs.trang_thai', $request->trang_thai);
         }
 
-        $bangChucDanh = $query->select('bang_chuc_danhs.*', DB::raw('COUNT(nhan_viens.id_nhan_vien) as so_luong_nhan_vien'))
+        $bangChucDanh = $query->select('bang_chuc_danhs.*', DB::raw('COUNT(nhan_viens.id) as so_luong_nhan_vien'))
             ->groupBy(
                 'bang_chuc_danhs.id_chuc_danh',
                 'bang_chuc_danhs.ten_chuc_danh',

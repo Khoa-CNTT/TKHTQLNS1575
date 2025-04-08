@@ -58,7 +58,8 @@ class NhanVienController extends Controller
             'message' => 'Đăng nhập thành công',
             'data' => [
                 'chia_khoa' => $token,
-                'token_type' => 'Bearer'
+                'token_type' => 'Bearer',
+                "data"=>$nhanVien
             ]
         ]);
     }
@@ -78,5 +79,22 @@ class NhanVienController extends Controller
                 'message' => 'Bạn chưa đăng nhập!',
             ]);
         }
+    }
+
+    public function thongTin()
+    {
+        $check = Auth::guard('sanctum')->user();
+        if($check){
+            $nhan_vien = NhanVien::get();
+            return response()->json([
+            'data' => $nhan_vien
+        ]);
+        }else{
+             return response()->json([
+            'message'=> "dang nhap that bai"
+        ]);
+        }
+
+
     }
 }

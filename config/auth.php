@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'nhan_vien' => [
+            'driver'    => 'session',
+            'provider'  => 'nhan_vien',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'nhan_vien' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\NhanVien::class,
         ],
 
         // 'users' => [

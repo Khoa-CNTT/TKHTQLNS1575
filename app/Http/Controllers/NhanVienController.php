@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\NhanVien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class NhanVienController extends Controller
@@ -81,15 +82,20 @@ class NhanVienController extends Controller
         }
     }
 
-    public function thongTin()
+    public function thongTin($id)
     {
-        $nhan_vien = Auth::guard('sanctum')->user();
-
-        return response()->json([
-            'data' => $nhan_vien
-        ]);
-    }
-    public function updateThongTin(Request $request)
+        $check = Auth::guard('sanctum')->user();
+        if ($check) {
+            $nhan_vien = NhanVien::where('id', $id)->first();
+            return response()->json([
+                'data' => $nhan_vien
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => "dang nhap that bai"
+            ], 401);
+        }
+    }    public function updateThongTin(Request $request)
     {
         $nhan_vien = Auth::guard('sanctum')->user();
 
@@ -116,6 +122,24 @@ class NhanVienController extends Controller
                 'status' => false,
                 'message' => "Có lỗi xảy ra!"
             ]);
+        }
+    }
+      public function dangXuat(Request $request)
+    {
+        $nhan_vien = Auth::guard('sanctum')->user();
+        if ($nhan_vien) {
+            DB::table('personal_access_tokens')
+                ->where('id', $nhan_vien->currentAccessToken()->id)->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => "Đã đăng xuất thiết bị này thành công"
+            ]);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => "Vui lòng đăng nhập"
+            ], 401);
         }
     }
     public function updateMatKhau(request $request)

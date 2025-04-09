@@ -18,5 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('/dang-ky-nhan-vien', [NhanVienController::class, "dangKyNhanVien"]);
 Route::post('/dang-nhap', [NhanVienController::class, "dangNhap"]);
 Route::post('/kiem-tra-chia-khoa', [NhanVienController::class, 'kiemTraChiaKhoa']);
-
-Route::get('/khach-hang/thong-tin', action: [NhanVienController::class, 'thongTin']);
+Route::get('/dang-xuat', [NhanVienController::class, 'dangXuat']);
+Route::get('/khach-hang/thong-tin/{id}', action: [NhanVienController::class, 'thongTin']);

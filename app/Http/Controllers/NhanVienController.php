@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DoiMatKhaurRequest;
 use App\Models\NhanVien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,19 +83,13 @@ class NhanVienController extends Controller
         }
     }
 
-    public function thongTin($id)
+    public function thongTin()
     {
-        $check = Auth::guard('sanctum')->user();
-        if ($check) {
-            $nhan_vien = NhanVien::where('id', $id)->first();
-            return response()->json([
-                'data' => $nhan_vien
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => "dang nhap that bai"
-            ], 401);
-        }
+        $khach_hang = Auth::guard('sanctum')->user();
+
+        return response()->json([
+            'data' => $khach_hang
+        ]);
     }    public function updateThongTin(Request $request)
     {
         $nhan_vien = Auth::guard('sanctum')->user();
@@ -105,12 +100,8 @@ class NhanVienController extends Controller
                 'so_dien_thoai'     => $request->so_dien_thoai,
                 "ho_va_ten"         => $request->ho_va_ten,
                 "ngay_sinh"         => $request->ngay_sinh,
-                "gioi_tinh"         => $request->gioi_tinh,
-                "ngay_tuyen_dung"   => $request->ngay_tuyen_dung,
-                "id_phong_ban"      => $request->id_phong_ban,
-                "id_chuc_danh"      => $request->id_chuc_danh,
-                "trang_thai"        => $request->trang_thai,
-                "loai_hop_dong"     => $request->loai_hop_dong,
+
+
             ]);
 
             return response()->json([
@@ -142,18 +133,20 @@ class NhanVienController extends Controller
             ], 401);
         }
     }
-    public function updateMatKhau(request $request)
+    public function doiMatKhauKhachHang(DoiMatKhaurRequest $request)
     {
-        $nhan_vien = Auth::guard('sanctum')->user();
-        // return response()->json($nhan_vien);
-        if ($nhan_vien) {
-            NhanVien::where('id', $nhan_vien->id)->update([
-                'password'             => bcrypt($request->password),
+
+        $khach_hang = Auth::guard('sanctum')->user();
+
+        if ($khach_hang) {
+            NhanVien::where('id', $khach_hang->id)->update([
+                'password' => bcrypt($request->password),
+
             ]);
 
             return response()->json([
                 'status' => true,
-                'message' => "Bạn đã cập nhật mật khẩu thành công!"
+                'message' => "Đã đổi mật khẩu tài khoản thành công!"
             ]);
         } else {
             return response()->json([

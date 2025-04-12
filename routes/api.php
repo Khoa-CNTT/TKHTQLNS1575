@@ -38,7 +38,14 @@ Route::get('/admin/chuc-vu/data', [ChucVuController::class, 'getData']);
 Route::get('/admin/chuc-vu/data-open', [ChucVuController::class, 'getDataOpen']);
 
 
+
 Route::get('/admin/phong-ban/data-open', [PhongBanController::class, 'getDataOpen']);
+Route::get('/admin/phong-ban/data', [PhongBanController::class, 'getData']);
+Route::get('/admin/phong-ban/xuat-excel', [PhongBanController::class, 'xuatExcelPhongBan']);
+Route::post('/admin/phong-ban/create', [PhongBanController::class, 'store']);
+Route::post('/admin/phong-ban/change-status', [PhongBanController::class, 'changeStatus']);
+Route::post('/admin/phong-ban/update', [PhongBanController::class, 'updatePhongBan']);
+Route::post('/admin/phong-ban/delete', [PhongBanController::class, 'deletePhongBan']);
 
 
 

@@ -186,4 +186,22 @@ class ChucVuController extends Controller
             'message' => 'Đã xoá thành công'
         ]);
     }
+      public function getDataOpen()
+    {
+        $id_chuc_nang = 12;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+
+        if(!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = ChucVu::where('tinh_trang', 1)->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 }

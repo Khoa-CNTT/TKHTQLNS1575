@@ -17,6 +17,35 @@ use Maatwebsite\Excel\Facades\Excel;
 class ChucVuController extends Controller
 {
 
+    public function xuatExcelChucVu()
+    {
+        $id_chuc_nang = 17;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+
+        if(!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = ChucVu::get();
+
+        foreach ($data as $key => $value) {
+            $value->stt = $key + 1;
+        }
+
+        // Lưu log
+        ThongBao::create([
+            'tieu_de'           => 'Xuất dữ liệu chức vụ',
+            'noi_dung'          => 'Chức vụ vừa xuất dữ liệu ra khỏi hệ thống',
+            'icon_thong_bao'    => 'fa-regular fa-file-excel',
+            'color_thong_bao'   => 'text-primary',
+            'id_nhan_vien'      => $user_login->id,
+        ]);
+
+        return Excel::download(new ExcelChucVuExport($data), 'chuc_vu.xlsx');
+    }
     public function getData()
     {
         $id_chuc_nang = 11;
@@ -35,26 +64,6 @@ class ChucVuController extends Controller
             'data' => $data
         ]);
     }
-
-    public function getDataOpen()
-    {
-        $id_chuc_nang = 12;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
-        $data = ChucVu::where('tinh_trang', 1)->get();
-
-        return response()->json([
-            'data' => $data
-        ]);
-    }
-
     public function store(ChucVuCreateRequest $request)
     {
         $id_chuc_nang = 13;
@@ -176,35 +185,5 @@ class ChucVuController extends Controller
             'status' => true,
             'message' => 'Đã xoá thành công'
         ]);
-    }
-
-    public function xuatExcelChucVu()
-    {
-        $id_chuc_nang = 17;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
-        $data = ChucVu::get();
-
-        foreach ($data as $key => $value) {
-            $value->stt = $key + 1;
-        }
-
-        // Lưu log
-        ThongBao::create([
-            'tieu_de'           => 'Xuất dữ liệu chức vụ',
-            'noi_dung'          => 'Chức vụ vừa xuất dữ liệu ra khỏi hệ thống',
-            'icon_thong_bao'    => 'fa-regular fa-file-excel',
-            'color_thong_bao'   => 'text-primary',
-            'id_nhan_vien'      => $user_login->id,
-        ]);
-
-        return Excel::download(new ExcelChucVuExport($data), 'chuc_vu.xlsx');
     }
 }

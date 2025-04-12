@@ -19,7 +19,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/admin/dang-xuat', [NhanVienController::class, 'dangXuat']);
 Route::get('/admin/dang-xuat-all', [NhanVienController::class, 'dangXuatAll']);
 Route::post('/admin/dang-nhap', [NhanVienController::class, 'login']);
-
-
-
 Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);
+
+
+Route::get('/admin/chuc-vu/xuat-excel', [ChucVuController::class, 'xuatExcelChucVu']);
+Route::post('/admin/chuc-vu/create', [ChucVuController::class, 'store']);
+Route::post('/admin/chuc-vu/change-status', [ChucVuController::class, 'changeStatus']);
+Route::post('/admin/chuc-vu/update', [ChucVuController::class, 'updateChucVu']);
+Route::post('/admin/chuc-vu/delete', [ChucVuController::class, 'deleteChucVu']);
+Route::get('/admin/chuc-vu/data', [ChucVuController::class, 'getData']);

@@ -1,38 +1,24 @@
 <?php
 
-use App\Http\Controllers\BangChucDanhController;
+use App\Http\Controllers\ChamCongController;
+use App\Http\Controllers\ChiTietHopDongController;
+use App\Http\Controllers\ChucVuController;
+use App\Http\Controllers\KpiNhanVienController;
+use App\Http\Controllers\LoaiHopDongController;
 use App\Http\Controllers\NhanVienController;
+use App\Http\Controllers\PhanQuyenController;
 use App\Http\Controllers\PhongBanController;
+use App\Http\Controllers\QuyDinhChoDiemController;
+use App\Http\Controllers\ThongBaoController;
+use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\ThuongVaPhatController;
+use App\Http\Controllers\TieuChiKPIController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-// nhan viên
-Route::post("/dang-ky-nhan-vien", [NhanVienController::class, "dangKyNhanVien"]);
-Route::post("/dang-nhap", [NhanVienController::class, "dangNhap"]);
-Route::post('/kiem-tra-chia-khoa', [NhanVienController::class, 'kiemTraChiaKhoa']);
-
-Route::get('/dang-xuat', [NhanVienController::class, 'dangXuat']);
+Route::get('/admin/dang-xuat', [NhanVienController::class, 'dangXuat']);
+Route::get('/admin/dang-xuat-all', [NhanVienController::class, 'dangXuatAll']);
 
 
-// bang chuc danh
-Route::get("/get-bang-chuc-danh", [BangChucDanhController::class, 'getBangChucDanh']);
-Route::post("/create-bang-chuc-danh", [BangChucDanhController::class, 'createBangChucDanh']);
-Route::put("/update-bang-chuc-danh", [BangChucDanhController::class, 'updateBangChucDanh']);
-Route::delete("/delete-bang-chuc-danh/{id}", [BangChucDanhController::class, 'deleteBangChucDanh']);
-Route::get("/get-bang-chuc-danh-chi-tiet/{id}", [BangChucDanhController::class, 'getBangChucDanhChiTiet']);
 
-// phong ban
-Route::get("/get-phong-ban", [PhongBanController::class, 'getPhongBan']);
-Route::post("/create-phong-ban", [PhongBanController::class, 'createPhongBan']);
-Route::put("/update-phong-ban", [PhongBanController::class, 'updatePhongBan']);
-Route::delete("/delete-phong-ban/{id}", [PhongBanController::class, 'deletePhongBan']);
+Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);

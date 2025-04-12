@@ -62,3 +62,12 @@ Route::post('/admin/chi-tiet-hop-dong/create', [ChiTietHopDongController::class,
 
 Route::get('/admin/loai-hop-dong/data-open', [LoaiHopDongController::class, 'getDataOpen']);
 
+
+Route::get('/admin/kpi-nhan-vien/data', [KpiNhanVienController::class, 'getData']);
+Route::post('/admin/kpi-nhan-vien/create', [KpiNhanVienController::class, 'store']);
+Route::post('/admin/kpi-nhan-vien/cham-diem', [KpiNhanVienController::class, 'chamDiem']);
+Route::post('/admin/kpi-nhan-vien/update', [KpiNhanVienController::class, 'updateKpiNhanVien']);
+Route::post('/admin/kpi-nhan-vien/delete', [KpiNhanVienController::class, 'deleteKpiNhanVien']);
+Route::post('/admin/kpi-nhan-vien/tim-kiem', [KpiNhanVienController::class, 'timKiemKpiNhanVien']);
+Route::get('/admin/kpi-nhan-vien/xuat-excel', [KpiNhanVienController::class, 'xuatExcelKPINhanVien']);
+

@@ -28,3 +28,9 @@ Route::post('/admin/chuc-vu/change-status', [ChucVuController::class, 'changeSta
 Route::post('/admin/chuc-vu/update', [ChucVuController::class, 'updateChucVu']);
 Route::post('/admin/chuc-vu/delete', [ChucVuController::class, 'deleteChucVu']);
 Route::get('/admin/chuc-vu/data', [ChucVuController::class, 'getData']);
+
+
+
+Route::post('/admin/chuc-nang/data', [PhanQuyenController::class, 'getListChucNang']);
+Route::post('/admin/phan-quyen/create', [PhanQuyenController::class, 'setQuyen']);
+Route::post('/admin/phan-quyen/delete', [PhanQuyenController::class, 'delQuyen']);

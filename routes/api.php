@@ -55,6 +55,14 @@ Route::post('/admin/phan-quyen/create', [PhanQuyenController::class, 'setQuyen']
 Route::post('/admin/phan-quyen/delete', [PhanQuyenController::class, 'delQuyen']);
 
 
+Route::get('/admin/quy-dinh-cho-diem/data', [QuyDinhChoDiemController::class, 'getData']);
+Route::post('/admin/quy-dinh-cho-diem/create', [QuyDinhChoDiemController::class, 'store']);
+Route::post('/admin/quy-dinh-cho-diem/change-status', [QuyDinhChoDiemController::class, 'changeStatus']);
+Route::post('/admin/quy-dinh-cho-diem/update', [QuyDinhChoDiemController::class, 'updateQuyDinhChoDiem']);
+Route::post('/admin/quy-dinh-cho-diem/delete', [QuyDinhChoDiemController::class, 'deleteQuyDinhChoDiem']);
+Route::get('/admin/quy-dinh-cho-diem/xuat-excel', [QuyDinhChoDiemController::class, 'xuatExcelQuyDinhChoDiem']);
+
+
 
 
 Route::post('/admin/chi-tiet-hop-dong/create', [ChiTietHopDongController::class, 'store']);

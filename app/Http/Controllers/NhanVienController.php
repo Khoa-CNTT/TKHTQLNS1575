@@ -71,7 +71,7 @@ class NhanVienController extends Controller
 
     public function kiemTraChiaKhoa()
     {
-        $check = Auth::guard('sanctum')->user();
+        $check  = $this->isUserNhanVien();
 
         if ($check) {
             return response()->json([
@@ -104,4 +104,78 @@ class NhanVienController extends Controller
             ], 401);
         }
     }
+
+    public function thongTin()
+    {
+        $khach_hang = Auth::guard('sanctum')->user();
+
+        return response()->json([
+            'data' => $khach_hang
+        ]);
+    }    public function updateThongTin(Request $request)
+    {
+        $nhan_vien = Auth::guard('sanctum')->user();
+
+        if ($nhan_vien) {
+            NhanVien::where('id', $nhan_vien->id)->update([
+                'email'             => $request->email,
+                'so_dien_thoai'     => $request->so_dien_thoai,
+                "ho_va_ten"         => $request->ho_va_ten,
+                "ngay_sinh"         => $request->ngay_sinh,
+
+
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => "Bạn đã cập nhật thông tin thành công!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Có lỗi xảy ra!"
+            ]);
+        }
+    }
+      public function dangXuat(Request $request)
+    {
+        $nhan_vien = Auth::guard('sanctum')->user();
+        if ($nhan_vien) {
+            DB::table('personal_access_tokens')
+                ->where('id', $nhan_vien->currentAccessToken()->id)->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => "Đã đăng xuất thiết bị này thành công"
+            ]);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => "Vui lòng đăng nhập"
+            ], 401);
+        }
+    }
+    public function doiMatKhauKhachHang(DoiMatKhaurRequest $request)
+    {
+
+        $khach_hang = Auth::guard('sanctum')->user();
+
+        if ($khach_hang) {
+            NhanVien::where('id', $khach_hang->id)->update([
+                'password' => bcrypt($request->password),
+
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => "Đã đổi mật khẩu tài khoản thành công!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Có lỗi xảy ra!"
+            ]);
+        }
+    }
+
 }

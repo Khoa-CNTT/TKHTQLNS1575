@@ -54,6 +54,59 @@ class NhanVienController extends Controller
         }
 
     }
+    public function checkLogin()
+    {
+        $user_login   = Auth::guard('sanctum')->user();
+        if ($user_login && $user_login instanceof \App\Models\NhanVien) {
+            return response()->json([
+                'status'    =>  true
+            ]);
+        } else {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn cần đăng nhập vào hệ thống trước!'
+            ]);
+        }
+    }
+    public function dangXuat()
+    {
+        $user = Auth::guard('sanctum')->user();
+        if ($user && $user instanceof \App\Models\NhanVien) {
+            DB::table('personal_access_tokens')->where('id', $user->currentAccessToken()->id)->delete();
+            return response()->json([
+                'status'    =>  true,
+                'message'   =>  'Bạn đã đăng xuất thành công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không đủ quyền thực hiện chức năng này!',
+            ]);
+        }
+    }
+
+    public function dangXuatAll()
+    {
+        $user     = Auth::guard('sanctum')->user();
+        if ($user && $user instanceof \App\Models\NhanVien) {
+
+            $ds_token = $user->tokens;
+
+            foreach ($ds_token as $key => $value) {
+                $value->delete();
+            }
+
+            return response()->json([
+                'status'    =>  true,
+                'message'   =>  'Bạn đã đăng xuất tất cả thành công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không đủ quyền thực hiện chức năng này!',
+            ]);
+        }
+    }
     public function xuatExcelNhanVien()
     {
         $id_chuc_nang = 8;

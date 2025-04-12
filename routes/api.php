@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/dang-xuat', [NhanVienController::class, 'dangXuat']);
 Route::get('/admin/dang-xuat-all', [NhanVienController::class, 'dangXuatAll']);
+Route::post('/admin/thong-bao/data', [ThongBaoController::class, 'getDataThongBao']);
 Route::post('/admin/dang-nhap', [NhanVienController::class, 'login']);
 Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);
 Route::get('/admin/nhan-vien/xuat-excel', [NhanVienController::class, 'xuatExcelNhanVien']);

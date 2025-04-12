@@ -71,3 +71,10 @@ Route::post('/admin/kpi-nhan-vien/delete', [KpiNhanVienController::class, 'delet
 Route::post('/admin/kpi-nhan-vien/tim-kiem', [KpiNhanVienController::class, 'timKiemKpiNhanVien']);
 Route::get('/admin/kpi-nhan-vien/xuat-excel', [KpiNhanVienController::class, 'xuatExcelKPINhanVien']);
 
+Route::get('/admin/tieu-chi-kpi/data', [TieuChiKPIController::class, 'getData']);
+Route::get('/admin/tieu-chi-kpi/data-open', [TieuChiKPIController::class, 'getDataOpen']);
+Route::post('/admin/tieu-chi-kpi/create', [TieuChiKPIController::class, 'store']);
+Route::post('/admin/tieu-chi-kpi/change-status', [TieuChiKPIController::class, 'changeStatus']);
+Route::post('/admin/tieu-chi-kpi/update', [TieuChiKPIController::class, 'updateTieuChiKPI']);
+Route::post('/admin/tieu-chi-kpi/delete', [TieuChiKPIController::class, 'deleteTieuChiKPI']);
+Route::get('/admin/tieu-chi-kpi/xuat-excel', [TieuChiKPIController::class, 'xuatExcelTieuChiPKI']);

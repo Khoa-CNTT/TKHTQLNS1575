@@ -305,4 +305,23 @@ class NhanVienController extends Controller
             'message' => 'Đã xoá thành công'
         ]);
     }
+     public function getDataOpen()
+    {
+        $id_chuc_nang = 2;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+
+        if (!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = NhanVien::where('is_block', 0)
+            ->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 }

@@ -61,7 +61,15 @@ Route::post('/admin/quy-dinh-cho-diem/change-status', [QuyDinhChoDiemController:
 Route::post('/admin/quy-dinh-cho-diem/update', [QuyDinhChoDiemController::class, 'updateQuyDinhChoDiem']);
 Route::post('/admin/quy-dinh-cho-diem/delete', [QuyDinhChoDiemController::class, 'deleteQuyDinhChoDiem']);
 Route::get('/admin/quy-dinh-cho-diem/xuat-excel', [QuyDinhChoDiemController::class, 'xuatExcelQuyDinhChoDiem']);
+Route::get('/admin/quy-dinh-cho-diem/data-open', [QuyDinhChoDiemController::class, 'getDataOpen']);
 
+Route::get('/admin/thuong-va-phat/xuat-excel', [ThuongVaPhatController::class, 'xuatExcelThuongVaPhat']);
+Route::get('/admin/thuong-va-phat/data', [ThuongVaPhatController::class, 'getData']);
+Route::get('/admin/nhan-vien/data-open', [NhanVienController::class, 'getDataOpen']);
+Route::post('/admin/thuong-va-phat/create', [ThuongVaPhatController::class, 'store']);
+Route::post('/admin/thuong-va-phat/update', [ThuongVaPhatController::class, 'updateThuongPhat']);
+Route::post('/admin/thuong-va-phat/delete', [ThuongVaPhatController::class, 'deleteThuongPhat']);
+Route::post('/admin/thuong-va-phat/tim-kiem', [ThuongVaPhatController::class, 'timKiemThuongPhat']);
 
 
 

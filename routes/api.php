@@ -94,3 +94,12 @@ Route::post('/admin/tieu-chi-kpi/change-status', [TieuChiKPIController::class, '
 Route::post('/admin/tieu-chi-kpi/update', [TieuChiKPIController::class, 'updateTieuChiKPI']);
 Route::post('/admin/tieu-chi-kpi/delete', [TieuChiKPIController::class, 'deleteTieuChiKPI']);
 Route::get('/admin/tieu-chi-kpi/xuat-excel', [TieuChiKPIController::class, 'xuatExcelTieuChiPKI']);
+
+Route::get('/admin/chi-tiet-hop-dong/xuat-excel', [ChiTietHopDongController::class, 'xuatExcelChiTietHopDong']);
+Route::get('/admin/chi-tiet-hop-dong/data', [ChiTietHopDongController::class, 'getData']);
+Route::get('/admin/loai-hop-dong/data', [LoaiHopDongController::class, 'getData']);
+Route::post('/admin/loai-hop-dong/create', [LoaiHopDongController::class, 'store']);
+Route::post('/admin/loai-hop-dong/change-status', [LoaiHopDongController::class, 'changeStatus']);
+Route::post('/admin/loai-hop-dong/update', [LoaiHopDongController::class, 'updateLoaiHopDong']);
+Route::post('/admin/loai-hop-dong/delete', [LoaiHopDongController::class, 'deleteLoaiHopDong']);
+Route::get('/admin/loai-hop-dong/xuat-excel', [LoaiHopDongController::class, 'xuatExcelLoaiHopDong']);

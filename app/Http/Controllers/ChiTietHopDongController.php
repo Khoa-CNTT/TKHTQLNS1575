@@ -13,6 +13,26 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ChiTietHopDongController extends Controller
 {
+    public function getData()
+    {
+        $id_chuc_nang = 46;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+
+        if (!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = ChiTietHopDong::join('nhan_viens', 'nhan_viens.id', 'chi_tiet_hop_dongs.id_nhan_vien')
+            ->join('loai_hop_dongs', 'loai_hop_dongs.id', 'chi_tiet_hop_dongs.id_loai_hop_dong')
+            ->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
     public function store(NhanVienCreateHopDongRequest $request)
     {
         $id_chuc_nang = 47;
@@ -47,5 +67,35 @@ class ChiTietHopDongController extends Controller
             'status' => true,
             'message' => 'Đã tạo mới hợp đồng thành công.',
         ]);
+    }
+    public function xuatExcelChiTietHopDong()
+    {
+        $id_chuc_nang = 48;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+
+        if (!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = ChiTietHopDong::join('nhan_viens', 'nhan_viens.id', 'chi_tiet_hop_dongs.id_nhan_vien')
+            ->join('loai_hop_dongs', 'loai_hop_dongs.id', 'chi_tiet_hop_dongs.id_loai_hop_dong')
+            ->get();
+        foreach ($data as $key => $value) {
+            $value->stt = $key + 1;
+        }
+
+        // Lưu log
+        ThongBao::create([
+            'tieu_de'           => 'Xuất dữ liệu chi tiết hợp đồng',
+            'noi_dung'          => 'Chi tiết hợp đồng vừa xuất dữ liệu ra khỏi hệ thống',
+            'icon_thong_bao'    => 'fa-regular fa-file-excel',
+            'color_thong_bao'   => 'text-primary',
+            'id_nhan_vien'      => $user_login->id,
+        ]);
+
+        return Excel::download(new ExcelChiTietHopDongExport($data), 'chi_tiet_hop_dong.xlsx');
     }
 }

@@ -28,6 +28,11 @@ Route::post('/admin/nhan-vien/create', [NhanVienController::class, 'store']);
 Route::post('/admin/nhan-vien/change-status', [NhanVienController::class, 'changeStatus']);
 Route::post('/admin/nhan-vien/update', [NhanVienController::class, 'updateNhanVien']);
 Route::post('/admin/nhan-vien/delete', [NhanVienController::class, 'deleteNhanVien']);
+Route::post('/admin/tinh-luong', [NhanVienController::class, 'tinhLuong']);
+Route::post('/admin/luong/xuat-excel', [NhanVienController::class, 'xuatExcelLuong']);
+Route::post('/admin/tinh-luong-4', [NhanVienController::class, 'tinhLuong4']);
+Route::post('/admin/luong-theo-thang/xuat-excel', [NhanVienController::class, 'xuatExcelLuongTheoThang']);
+
 
 
 Route::get('/admin/chuc-vu/xuat-excel', [ChucVuController::class, 'xuatExcelChucVu']);
@@ -75,7 +80,6 @@ Route::post('/admin/thuong-va-phat/tim-kiem', [ThuongVaPhatController::class, 't
 
 Route::post('/admin/chi-tiet-hop-dong/create', [ChiTietHopDongController::class, 'store']);
 
-
 Route::get('/admin/loai-hop-dong/data-open', [LoaiHopDongController::class, 'getDataOpen']);
 
 
@@ -103,3 +107,14 @@ Route::post('/admin/loai-hop-dong/change-status', [LoaiHopDongController::class,
 Route::post('/admin/loai-hop-dong/update', [LoaiHopDongController::class, 'updateLoaiHopDong']);
 Route::post('/admin/loai-hop-dong/delete', [LoaiHopDongController::class, 'deleteLoaiHopDong']);
 Route::get('/admin/loai-hop-dong/xuat-excel', [LoaiHopDongController::class, 'xuatExcelLoaiHopDong']);
+
+Route::post('/admin/cham-cong/thong-ke', [ThongKeController::class, 'thongKeChamCong']);
+Route::post('/admin/kpi-nhan-vien/thong-ke', [ThongKeController::class, 'thongKeKPINhanVien']);
+Route::post('/admin/diem-phat/thong-ke', [ThongKeController::class, 'thongKeDiemPhat']);
+Route::post('/admin/diem-thuong/thong-ke', [ThongKeController::class, 'thongKeDiemThuong']);
+
+Route::get('/admin/cham-cong/data', [ChamCongController::class, 'getData']);
+Route::post('/admin/cham-cong/create', [ChamCongController::class, 'store']);
+Route::post('/admin/cham-cong/update', [ChamCongController::class, 'updateChamCong']);
+Route::post('/admin/cham-cong/delete', [ChamCongController::class, 'deleteChamCong']);
+Route::get('/admin/cham-cong/xuat-excel', [ChamCongController::class, 'xuatExcelChamCong']);

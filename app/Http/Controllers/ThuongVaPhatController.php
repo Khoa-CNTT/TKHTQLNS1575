@@ -17,9 +17,9 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ThuongVaPhatController extends Controller
 {
-    public function timKiemThuongPhat(Request $request)
+    public function getData()
     {
-        $id_chuc_nang = 65;
+        $id_chuc_nang = 61;
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
@@ -38,16 +38,15 @@ class ThuongVaPhatController extends Controller
                 'quy_dinh_cho_diems.noi_dung',
                 'nv.ho_va_ten as ten_nhan_vien_cho_diem',
             )
-            ->where('nhan_viens.ho_va_ten', 'like', '%' . $request->noi_dung . '%')
             ->get();
-
         return response()->json([
             'data' => $data
         ]);
     }
-    public function deleteThuongPhat(ThuongVaPhatDeleteRequest $request)
+
+    public function store(ThuongVaPhatCreateRequest $request)
     {
-        $id_chuc_nang = 64;
+        $id_chuc_nang = 62;
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
@@ -57,19 +56,28 @@ class ThuongVaPhatController extends Controller
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
             ]);
         }
-        ThuongVaPhat::where('id', $request->id)->delete();
+        $quyDinh = QuyDinhChoDiem::where('id', $request->id_quy_dinh)->first();
+
+        ThuongVaPhat::create([
+            'id_nhan_vien'          => $request->id_nhan_vien,
+            'id_nhan_vien_cho_diem' => 1,
+            'id_quy_dinh'           => $quyDinh->id,
+            'diem'                  => $quyDinh->so_diem,
+            'ly_do'                 => $request->ly_do,
+            'ngay'                  => Carbon::now()
+        ]);
         // Lưu log
         ThongBao::create([
-            'tieu_de'           => 'Xóa thưởng và phạt',
-            'noi_dung'          => 'Thưởng và phạt vừa được xóa',
-            'icon_thong_bao'    => 'fa-solid fa-shield-halved',
-            'color_thong_bao'   => 'text-warning',
+            'tieu_de'           => 'Tạo thưởng và phạt',
+            'noi_dung'          => 'Thưởng và phạt vừa được tạo',
+            'icon_thong_bao'    => 'fa-regular fa-building',
+            'color_thong_bao'   => 'text-danger',
             'id_nhan_vien'      => $user_login->id,
         ]);
 
         return response()->json([
-            'status' => true,
-            'message' => 'Đã xoá thành công'
+            'status'    =>  true,
+            'message'   =>  'Đã tạo mới thành công'
         ]);
     }
 
@@ -109,9 +117,10 @@ class ThuongVaPhatController extends Controller
             'message'   =>  'Đã cập nhật thành công'
         ]);
     }
-    public function store(ThuongVaPhatCreateRequest $request)
+
+    public function deleteThuongPhat(ThuongVaPhatDeleteRequest $request)
     {
-        $id_chuc_nang = 62;
+        $id_chuc_nang = 64;
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
@@ -121,33 +130,25 @@ class ThuongVaPhatController extends Controller
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
             ]);
         }
-        $quyDinh = QuyDinhChoDiem::where('id', $request->id_quy_dinh)->first();
-
-        ThuongVaPhat::create([
-            'id_nhan_vien'          => $request->id_nhan_vien,
-            'id_nhan_vien_cho_diem' => 1,
-            'id_quy_dinh'           => $quyDinh->id,
-            'diem'                  => $quyDinh->so_diem,
-            'ly_do'                 => $request->ly_do,
-            'ngay'                  => Carbon::now()
-        ]);
+        ThuongVaPhat::where('id', $request->id)->delete();
         // Lưu log
         ThongBao::create([
-            'tieu_de'           => 'Tạo thưởng và phạt',
-            'noi_dung'          => 'Thưởng và phạt vừa được tạo',
-            'icon_thong_bao'    => 'fa-regular fa-building',
-            'color_thong_bao'   => 'text-danger',
+            'tieu_de'           => 'Xóa thưởng và phạt',
+            'noi_dung'          => 'Thưởng và phạt vừa được xóa',
+            'icon_thong_bao'    => 'fa-solid fa-shield-halved',
+            'color_thong_bao'   => 'text-warning',
             'id_nhan_vien'      => $user_login->id,
         ]);
 
         return response()->json([
-            'status'    =>  true,
-            'message'   =>  'Đã tạo mới thành công'
+            'status' => true,
+            'message' => 'Đã xoá thành công'
         ]);
     }
-    public function getData()
+
+    public function timKiemThuongPhat(Request $request)
     {
-        $id_chuc_nang = 61;
+        $id_chuc_nang = 65;
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
@@ -166,13 +167,15 @@ class ThuongVaPhatController extends Controller
                 'quy_dinh_cho_diems.noi_dung',
                 'nv.ho_va_ten as ten_nhan_vien_cho_diem',
             )
+            ->where('nhan_viens.ho_va_ten', 'like', '%' . $request->noi_dung . '%')
             ->get();
+
         return response()->json([
             'data' => $data
         ]);
     }
 
-     public function xuatExcelThuongVaPhat()
+    public function xuatExcelThuongVaPhat()
     {
         $id_chuc_nang = 66;
         $user_login = Auth::guard('sanctum')->user();
@@ -208,5 +211,4 @@ class ThuongVaPhatController extends Controller
 
         return Excel::download(new ExcelThuongVaPhatExport($data), 'thuong_va_phat.xlsx');
     }
-
 }

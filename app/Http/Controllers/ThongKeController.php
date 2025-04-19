@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ThongKeController extends Controller
 {
-     public function thongKeChamCong(Request $request)
+    public function thongKeChamCong(Request $request)
     {
         $id_chuc_nang = 67;
         $user_login = Auth::guard('sanctum')->user();
@@ -139,5 +139,4 @@ class ThongKeController extends Controller
             'tong_so_diem_thuong' =>  $tong_so_diem_thuong,
         ]);
     }
-
 }

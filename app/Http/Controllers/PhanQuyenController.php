@@ -101,5 +101,4 @@ class PhanQuyenController extends Controller
             'message'   =>  'Đã hủy quyền này thành công!'
         ]);
     }
-
 }

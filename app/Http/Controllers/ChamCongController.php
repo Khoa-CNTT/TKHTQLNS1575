@@ -164,5 +164,4 @@ class ChamCongController extends Controller
 
         return Excel::download(new ExcelChamCongExport($data), 'cham_cong.xlsx');
     }
-
 }

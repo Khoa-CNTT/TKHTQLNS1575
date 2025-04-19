@@ -34,7 +34,8 @@ class LoaiHopDongController extends Controller
             'data' => $data
         ]);
     }
-public function getDataOpen()
+
+    public function getDataOpen()
     {
         $id_chuc_nang = 40;
         $user_login = Auth::guard('sanctum')->user();
@@ -52,6 +53,7 @@ public function getDataOpen()
             'data' => $data
         ]);
     }
+
     public function store(LoaiHopDongCreateRequest $request)
     {
         $id_chuc_nang = 41;

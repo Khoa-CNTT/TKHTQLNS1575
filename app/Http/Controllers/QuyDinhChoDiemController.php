@@ -34,7 +34,24 @@ class QuyDinhChoDiemController extends Controller
             'data' => $data
         ]);
     }
+    public function getDataOpen()
+    {
+        $id_chuc_nang = 33;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
+        if (!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = QuyDinhChoDiem::where('tinh_trang', 1)->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 
     public function store(QDCDCreateRequest $request)
     {
@@ -196,23 +213,4 @@ class QuyDinhChoDiemController extends Controller
 
         return Excel::download(new ExcelQuyDinhChoDiemExport($data), 'quy_dinh_cho_diem.xlsx');
     }
-     public function getDataOpen()
-    {
-        $id_chuc_nang = 33;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
-        $data = QuyDinhChoDiem::where('tinh_trang', 1)->get();
-
-        return response()->json([
-            'data' => $data
-        ]);
-    }
-
 }

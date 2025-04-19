@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PhongBanController extends Controller
 {
-     public function getData()
+    public function getData()
     {
         $id_chuc_nang = 18;
         $user_login = Auth::guard('sanctum')->user();
@@ -34,6 +34,7 @@ class PhongBanController extends Controller
             'data' => $data
         ]);
     }
+
     public function getDataOpen()
     {
         $id_chuc_nang = 19;
@@ -52,35 +53,7 @@ class PhongBanController extends Controller
             'data' => $data
         ]);
     }
-     public function xuatExcelPhongBan()
-    {
-        $id_chuc_nang = 24;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
-        $data = PhongBan::get();
-
-        foreach ($data as $key => $value) {
-            $value->stt = $key + 1;
-        }
-
-        // Lưu log
-        ThongBao::create([
-            'tieu_de'           => 'Xuất dữ liệu phòng ban',
-            'noi_dung'          => 'Phòng ban vừa xuất dữ liệu ra khỏi hệ thống',
-            'icon_thong_bao'    => 'fa-regular fa-file-excel',
-            'color_thong_bao'   => 'text-primary',
-            'id_nhan_vien'      => $user_login->id,
-        ]);
-
-        return Excel::download(new ExcelPhongBanExport($data), 'phong_ban.xlsx');
-    }
     public function store(CreatePhongBanRequest $request)
     {
         $id_chuc_nang = 20;
@@ -206,5 +179,35 @@ class PhongBanController extends Controller
             'status' => true,
             'message' => 'Đã xoá thành công'
         ]);
+    }
+
+    public function xuatExcelPhongBan()
+    {
+        $id_chuc_nang = 24;
+        $user_login = Auth::guard('sanctum')->user();
+        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+
+        if (!$check) {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
+            ]);
+        }
+        $data = PhongBan::get();
+
+        foreach ($data as $key => $value) {
+            $value->stt = $key + 1;
+        }
+
+        // Lưu log
+        ThongBao::create([
+            'tieu_de'           => 'Xuất dữ liệu phòng ban',
+            'noi_dung'          => 'Phòng ban vừa xuất dữ liệu ra khỏi hệ thống',
+            'icon_thong_bao'    => 'fa-regular fa-file-excel',
+            'color_thong_bao'   => 'text-primary',
+            'id_nhan_vien'      => $user_login->id,
+        ]);
+
+        return Excel::download(new ExcelPhongBanExport($data), 'phong_ban.xlsx');
     }
 }

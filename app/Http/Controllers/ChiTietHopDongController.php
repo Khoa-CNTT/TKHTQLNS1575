@@ -33,6 +33,7 @@ class ChiTietHopDongController extends Controller
             'data' => $data
         ]);
     }
+
     public function store(NhanVienCreateHopDongRequest $request)
     {
         $id_chuc_nang = 47;
@@ -68,6 +69,7 @@ class ChiTietHopDongController extends Controller
             'message' => 'Đã tạo mới hợp đồng thành công.',
         ]);
     }
+
     public function xuatExcelChiTietHopDong()
     {
         $id_chuc_nang = 48;

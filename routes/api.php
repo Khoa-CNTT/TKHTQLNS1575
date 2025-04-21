@@ -34,6 +34,7 @@ Route::post('/admin/tinh-luong', [NhanVienController::class, 'tinhLuong']);
 Route::post('/admin/tinh-luong-4', [NhanVienController::class, 'tinhLuong4']);
 Route::post('/admin/luong/xuat-excel', [NhanVienController::class, 'xuatExcelLuong']);
 Route::post('/admin/luong-theo-thang/xuat-excel', [NhanVienController::class, 'xuatExcelLuongTheoThang']);
+Route::get('/admin/thong-tin', [NhanVienController::class, 'thongTin']);
 
 Route::get('/admin/chuc-vu/data', [ChucVuController::class, 'getData']);
 Route::get('/admin/chuc-vu/data-open', [ChucVuController::class, 'getDataOpen']);

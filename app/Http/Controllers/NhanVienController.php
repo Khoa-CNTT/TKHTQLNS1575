@@ -24,6 +24,20 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class NhanVienController extends Controller
 {
+    public function thongTin(){
+        $user = Auth::guard('sanctum')->user();
+        if ($user && $user instanceof \App\Models\NhanVien) {
+            return response()->json([
+            'data' => $user
+        ]);
+        } else {
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'saiiiiiiiiiiiii',
+            ]);
+        }
+    }
+
     public function dangXuat()
     {
         $user = Auth::guard('sanctum')->user();

@@ -5,6 +5,8 @@ use App\Http\Controllers\ChiTietHopDongController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\KpiNhanVienController;
 use App\Http\Controllers\LoaiHopDongController;
+use App\Http\Controllers\LoaiVangController;
+use App\Http\Controllers\NghiPhepController;
 use App\Http\Controllers\NhanVienController;
 use App\Http\Controllers\PhanQuyenController;
 use App\Http\Controllers\PhongBanController;
@@ -112,3 +114,17 @@ Route::post('/admin/phan-quyen/create', [PhanQuyenController::class, 'setQuyen']
 Route::post('/admin/phan-quyen/delete', [PhanQuyenController::class, 'delQuyen']);
 
 Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);
+
+
+Route::get("/admin/get-loai-vang", [LoaiVangController::class, "getLoaiVang"]);
+Route::post("/admin/them-loai-vang", [LoaiVangController::class, "themLoaiVang"]);
+Route::put("/admin/sua-loai-vang", [LoaiVangController::class, "suaLoaiVang"]);
+Route::delete('/admin/xoa-loai-vang/{id}', [LoaiVangController::class, 'xoaLoaiVang']);
+
+
+
+Route::post("/admin/them-bao-cao-vang", [NghiPhepController::class, "themBaoCaoVang"]);
+Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang"]);
+Route::put("/admin/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVang"]);
+Route::delete('/admin/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVang']);
+Route::get('/admin/bao-cao-vang/xuat-excel',[NghiPhepController::class,'xuatExcel']);

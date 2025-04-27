@@ -11,7 +11,7 @@ class NghiPhep extends Model
      protected $table = 'nghi_pheps';
 
     protected $fillable = [
-        'id_nhan_vien',
+            'id_nhan_vien',
             'id_loai_vang',
             'ngay_bat_dau',
             'ngay_ket_thuc',

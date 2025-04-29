@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChamCongController;
 use App\Http\Controllers\ChiTietHopDongController;
 use App\Http\Controllers\ChucVuController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\KpiNhanVienController;
 use App\Http\Controllers\LoaiHopDongController;
 use App\Http\Controllers\NhanVienController;
@@ -112,3 +113,9 @@ Route::post('/admin/phan-quyen/create', [PhanQuyenController::class, 'setQuyen']
 Route::post('/admin/phan-quyen/delete', [PhanQuyenController::class, 'delQuyen']);
 
 Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);
+
+
+Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamCongNtf']);
+
+Route::get('/get-ip', [ConfigController::class, 'configIP']);
+

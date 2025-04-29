@@ -6,12 +6,17 @@ use App\Exports\ExcelChamCongExport;
 use App\Http\Requests\ChamCongCreateRequest;
 use App\Http\Requests\ChamCongDeleteRequest;
 use App\Http\Requests\ChamCongUpdateRequest;
+use App\Models\CaLam;
 use App\Models\ChamCong;
+use App\Models\ConfigIP;
+use App\Models\NhanVien;
 use App\Models\PhanQuyen;
 use App\Models\ThongBao;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PSpell\Config;
 
 class ChamCongController extends Controller
 {
@@ -21,7 +26,7 @@ class ChamCongController extends Controller
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if(!$check) {
+        if (!$check) {
             return response()->json([
                 'status'    =>  false,
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
@@ -29,7 +34,7 @@ class ChamCongController extends Controller
         };
         $data = ChamCong::join('nhan_viens', 'cham_congs.id_nhan_vien', 'nhan_viens.id')
             ->join('phong_bans', 'nhan_viens.id_phong_ban', 'phong_bans.id')
-            ->select('cham_congs.*', 'nhan_viens.ho_va_ten','phong_bans.ten_phong_ban',)
+            ->select('cham_congs.*', 'nhan_viens.ho_va_ten', 'phong_bans.ten_phong_ban',)
             ->get();
 
         return response()->json([
@@ -42,7 +47,7 @@ class ChamCongController extends Controller
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if(!$check) {
+        if (!$check) {
             return response()->json([
                 'status'    =>  false,
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
@@ -73,7 +78,7 @@ class ChamCongController extends Controller
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if(!$check) {
+        if (!$check) {
             return response()->json([
                 'status'    =>  false,
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
@@ -111,7 +116,7 @@ class ChamCongController extends Controller
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if(!$check) {
+        if (!$check) {
             return response()->json([
                 'status'    =>  false,
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
@@ -138,16 +143,16 @@ class ChamCongController extends Controller
         $user_login = Auth::guard('sanctum')->user();
         $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if(!$check) {
+        if (!$check) {
             return response()->json([
                 'status'    =>  false,
                 'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
             ]);
         };
         $data = ChamCong::join('nhan_viens', 'cham_congs.id_nhan_vien', 'nhan_viens.id')
-                        ->join('phong_bans', 'nhan_viens.id_phong_ban', 'phong_bans.id')
-                        ->select('cham_congs.*', 'nhan_viens.ho_va_ten', 'phong_bans.ten_phong_ban',)
-                        ->get();
+            ->join('phong_bans', 'nhan_viens.id_phong_ban', 'phong_bans.id')
+            ->select('cham_congs.*', 'nhan_viens.ho_va_ten', 'phong_bans.ten_phong_ban',)
+            ->get();
 
         foreach ($data as $key => $value) {
             $value->stt = $key + 1;
@@ -163,5 +168,77 @@ class ChamCongController extends Controller
         ]);
 
         return Excel::download(new ExcelChamCongExport($data), 'cham_cong.xlsx');
+    }
+
+    public function actionChamCongNtf($id, Request $request)
+    {
+        $ip = $request->ip();
+        $today = Carbon::now()->format('d/m/Y');
+        $check_ip = ConfigIP::where('ip_address', $ip)->first();
+        $time_now = Carbon::now()->format('H:i:s');
+        $time_now_1 = Carbon::now()->addMinutes(30)->format('H:i:s');
+        $time_now_2 = Carbon::now()->subMinutes(30)->format('H:i:s');
+        if ($ip == "127.0.0.1" || $check_ip) {
+            $ca_lam   = CaLam::whereTime('gio_vao', '<=', $time_now_1)
+                ->whereTime('gio_ra', '>=', $time_now_2)
+                ->first();
+
+            $nhan_vien = NhanVien::where('id', $id)->first();
+            if (!$nhan_vien) {
+                $status = 3;
+                $message = 'Nhân viên ' . $nhan_vien->ho_va_ten . ' không tồn tại';
+                return view('cham_cong', compact('status', 'message', 'time_now', 'today', 'ca_lam'));
+            }
+
+            $checkChamCong = ChamCong::where('id_nhan_vien', $id)
+                                    ->whereDate('ngay_lam_viec', Carbon::now()->format('Y-m-d'))
+                                    ->where('ca_lam', $ca_lam->id)
+                                    ->get();
+
+            if (count($checkChamCong) >= 2) {
+                $status = 2;
+                $message = 'Nhân viên ' . $nhan_vien->ho_va_ten . ' đã chấm công ca này rồi';
+                return view('cham_cong', compact('status', 'message', 'time_now', 'today', 'ca_lam'));
+            } elseif (count($checkChamCong) == 0) { // Vì chưa chấm công vào thì chỗ này bắt buộc là chấm công vào
+                $trang_thai = ChamCong::CHAM_CONG_DUNG;
+                if ($time_now > $ca_lam->gio_vao) {
+                    $trang_thai = ChamCong::CHAM_CONG_SAI_GIO;
+                }
+                $cham_cong_new = ChamCong::create([
+                    'id_nhan_vien'      => $id,
+                    'ngay_lam_viec'     => Carbon::now()->format('Y-m-d'),
+                    'ca_lam'            => $ca_lam->id,
+                    'thoi_gian_cham_cong' => $time_now,
+                    'trang_thai'        => $trang_thai,
+                    'type'              => ChamCong::CHAM_CONG_VAO,
+                ]);
+            } else {
+                $trang_thai = ChamCong::CHAM_CONG_DUNG;
+                if ($time_now < $ca_lam->gio_ra) {
+                    $trang_thai = ChamCong::CHAM_CONG_SAI_GIO;
+                }
+                $cham_cong_new = ChamCong::create([
+                    'id_nhan_vien'      => $id,
+                    'ngay_lam_viec'     => Carbon::now()->format('Y-m-d'),
+                    'ca_lam'            => $ca_lam->id,
+                    'thoi_gian_cham_cong' => $time_now,
+                    'trang_thai'        => $trang_thai,
+                    'type'              => ChamCong::CHAM_CONG_RA,
+                ]);
+            }
+            $status = 0;
+            if($trang_thai == ChamCong::CHAM_CONG_SAI_GIO) {
+                $status = 1;
+                $message = 'Nhân viên ' . $nhan_vien->ho_va_ten . ' đã chấm công <b style="color: #e74c3c">SAI GIỜ</b>!';
+            } else {
+                $message = 'Nhân viên ' . $nhan_vien->ho_va_ten . ' đã chấm công <b style="color: #27ae60">THÀNH CÔNG</b>!';
+            }
+            $vao_ra      = $cham_cong_new->type == ChamCong::CHAM_CONG_VAO ? 'VÀO' : 'RA';
+            return view('cham_cong', compact('status', 'message', 'time_now', 'today', 'ca_lam', 'vao_ra'));
+        } else {
+            $status = 1;
+            $message = 'IP không hợp lệ';
+            return view('cham_cong', compact('status', 'message', 'time_now', 'today'));
+        }
     }
 }

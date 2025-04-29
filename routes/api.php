@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChamCongController;
 use App\Http\Controllers\ChiTietHopDongController;
 use App\Http\Controllers\ChucVuController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\KpiNhanVienController;
 use App\Http\Controllers\LoaiHopDongController;
 use App\Http\Controllers\LoaiVangController;
@@ -127,4 +128,7 @@ Route::post("/admin/them-bao-cao-vang", [NghiPhepController::class, "themBaoCaoV
 Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang"]);
 Route::put("/admin/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVang"]);
 Route::delete('/admin/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVang']);
-Route::get('/admin/bao-cao-vang/xuat-excel',[NghiPhepController::class,'xuatExcel']);
+Route::get('/admin/bao-cao-vang/xuat-excel', [NghiPhepController::class, 'xuatExcel']);
+Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamCongNtf']);
+
+Route::get('/get-ip', [ConfigController::class, 'configIP']);

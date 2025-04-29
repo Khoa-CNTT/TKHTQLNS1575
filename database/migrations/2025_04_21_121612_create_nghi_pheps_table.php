@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('so_ngay_vang');
             $table->string('ly_do');
             $table->integer('tinh_trang')->default(0); // 0: chưa duyệt, 1: đã duyệt, 2: đã huỷ, 3: đã phê diệt
-            $table->integer('nguoi_phe_diet')->nullable();
+            $table->string('nguoi_phe_diet')->nullable();
             $table->date('ngay_phe_diet')->nullable();
             $table->string('ghi_chu')->nullable();
             $table->timestamps();

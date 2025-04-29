@@ -21,9 +21,9 @@ class ChamCong extends Model
     ];
     // Ca làm  1 : Sáng , 2: Trưa, 3 Tối
 
-    CONST CHAM_CONG_SAI_GIO     = 1;
-    CONST CHAM_CONG_DUNG        = 0;
+    const CHAM_CONG_SAI_GIO     = 1;
+    const CHAM_CONG_DUNG        = 0;
 
-    CONST CHAM_CONG_VAO         = 0;
-    CONST CHAM_CONG_RA          = 1;
+    const CHAM_CONG_VAO         = 0;
+    const CHAM_CONG_RA          = 1;
 }

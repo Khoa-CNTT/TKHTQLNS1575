@@ -129,6 +129,7 @@ Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang
 Route::put("/admin/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVang"]);
 Route::delete('/admin/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVang']);
 Route::get('/admin/bao-cao-vang/xuat-excel', [NghiPhepController::class, 'xuatExcel']);
+Route::post("/admin/trang-thai-chap-nhan", [NghiPhepController::class, "trangThaiChapNhan"]);
 Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamCongNtf']);
 
 Route::get('/get-ip', [ConfigController::class, 'configIP']);

@@ -191,9 +191,9 @@ class ChamCongController extends Controller
             }
 
             $checkChamCong = ChamCong::where('id_nhan_vien', $id)
-                                    ->whereDate('ngay_lam_viec', Carbon::now()->format('Y-m-d'))
-                                    ->where('ca_lam', $ca_lam->id)
-                                    ->get();
+                ->whereDate('ngay_lam_viec', Carbon::now()->format('Y-m-d'))
+                ->where('ca_lam', $ca_lam->id)
+                ->get();
 
             if (count($checkChamCong) >= 2) {
                 $status = 2;
@@ -227,7 +227,7 @@ class ChamCongController extends Controller
                 ]);
             }
             $status = 0;
-            if($trang_thai == ChamCong::CHAM_CONG_SAI_GIO) {
+            if ($trang_thai == ChamCong::CHAM_CONG_SAI_GIO) {
                 $status = 1;
                 $message = 'Nhân viên ' . $nhan_vien->ho_va_ten . ' đã chấm công <b style="color: #e74c3c">SAI GIỜ</b>!';
             } else {

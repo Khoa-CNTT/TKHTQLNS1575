@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class LoaiVangSeeder extends Seeder
 {
     /**
@@ -51,6 +52,5 @@ class LoaiVangSeeder extends Seeder
                 'tinh_trang' => 0,
             ],
         ]);
-
     }
 }

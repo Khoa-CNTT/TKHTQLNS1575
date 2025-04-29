@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaLam;
+use App\Models\ChamCong;
 use App\Models\NghiPhep;
+use App\Models\NhanVien;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+
 class NghiPhepController extends Controller
 {
     public function themBaoCaoVang(Request $request)
@@ -67,7 +72,7 @@ class NghiPhepController extends Controller
             'status' => 201,
             'message' => 'Thêm thành công',
             'nghiPhep' => $nghiPhep,
-        ],201);
+        ], 201);
     }
 
 
@@ -173,7 +178,7 @@ class NghiPhepController extends Controller
             'status' => 200,
             'message' => 'Sửa thành công',
             'nghiPhep' => $nghiPhep,
-        ],200);
+        ], 200);
     }
 
     public function xoaBaoCaoVang($id)
@@ -196,7 +201,8 @@ class NghiPhepController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Xóa thành công',
-        ]);    }
+        ]);
+    }
     public function xuatExcel()
     {
         $user_login = Auth::guard('sanctum')->user();
@@ -209,13 +215,13 @@ class NghiPhepController extends Controller
 
         // Get data with joins
         $data = NghiPhep::join('loai_vangs', 'nghi_pheps.id_loai_vang', '=', 'loai_vangs.id')
-                ->join('nhan_viens', 'nghi_pheps.id_nhan_vien', '=', 'nhan_viens.id')
-                ->select(
-                    'nghi_pheps.*',
-                    'loai_vangs.ten_loai_vang',
-                    'nhan_viens.ho_va_ten'
-                )
-                ->get();
+            ->join('nhan_viens', 'nghi_pheps.id_nhan_vien', '=', 'nhan_viens.id')
+            ->select(
+                'nghi_pheps.*',
+                'loai_vangs.ten_loai_vang',
+                'nhan_viens.ho_va_ten'
+            )
+            ->get();
 
         // Add STT (sequence number) to each row
         $stt = 1;
@@ -225,5 +231,68 @@ class NghiPhepController extends Controller
 
         // Create and return the Excel file
         return Excel::download(new \App\Exports\NghiPhepExport($data), 'bao-cao-vang.xlsx');
+    }
+
+    public function trangThaiChapNhan(Request $request)
+    {
+        $user_login = Auth::guard('sanctum')->user();
+        if (!$user_login) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Bạn không có quyền truy cập',
+            ], 401);
+        }
+        $nghiPhep = NghiPhep::find($request->id);
+        if (!$nghiPhep) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Không tìm thấy báo cáo nghỉ phép',
+            ], 404);
+        }
+        if ($nghiPhep->tinh_trang > 0) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'khong the chuyen trang thai duoc',
+            ]);
+        }
+        $nguoi_duyet = NhanVien::where('id', $user_login->id)->first();
+        $ca_lam = CaLam::whereTime('gio_vao', '<=', Carbon::now()->format('H:i:s'))
+            ->whereTime('gio_ra', '>=', Carbon::now()->format('H:i:s'))
+            ->first();
+        $time_now = Carbon::now('Asia/Ho_Chi_Minh')->format('H:i:s');
+        $trang_thai = ChamCong::CHAM_CONG_SAI_GIO;
+        ChamCong::insert([
+            [
+                'id_nhan_vien'         => $nghiPhep->id_nhan_vien,
+                'ngay_lam_viec'        => Carbon::now()->format('Y-m-d'),
+                'ca_lam'               => $ca_lam->id,
+                'thoi_gian_cham_cong'  => $time_now,
+                'trang_thai'           => $trang_thai,
+                'type'                 => ChamCong::CHAM_CONG_VAO,
+                'created_at'           => now(),
+                'updated_at'           => now(),
+            ],
+            [
+                'id_nhan_vien'         => $nghiPhep->id_nhan_vien,
+                'ngay_lam_viec'        => Carbon::now()->format('Y-m-d'),
+                'ca_lam'               => $ca_lam->id,
+                'thoi_gian_cham_cong'  => $time_now,
+                'trang_thai'           => $trang_thai,
+                'type'                 => ChamCong::CHAM_CONG_RA,
+                'created_at'           => now(),
+                'updated_at'           => now(),
+            ]
+        ]);
+
+        $nghiPhep->update([
+            'tinh_trang' => 1,
+            'nguoi_phe_diet' => $nguoi_duyet->ho_va_ten,
+            'ngay_phe_diet' => now(),
+        ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Chuyen trang thai chap nhan',
+            'data' => $nghiPhep,
+        ], 200);
     }
 }

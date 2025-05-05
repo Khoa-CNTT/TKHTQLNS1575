@@ -17,12 +17,12 @@ return new class extends Migration
             $table->integer('id_loai_vang');
             $table->date('ngay_bat_dau');
             $table->date('ngay_ket_thuc');
-            $table->date('so_ngay_vang');
+            $table->integer('so_ngay_vang');
             $table->string('ly_do');
             $table->integer('tinh_trang');
-            $table->integer('nguoi_phe_diet');
-            $table->date('ngay_phe_diet');
-            $table->string('ghi_chu');
+            $table->integer('nguoi_phe_duyet')->nullable();
+            $table->date('ngay_phe_duyet')->nullable();
+            $table->string('ghi_chu')->nullable();
             $table->timestamps();
         });
     }

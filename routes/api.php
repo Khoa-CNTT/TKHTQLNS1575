@@ -5,6 +5,8 @@ use App\Http\Controllers\ChiTietHopDongController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\KpiNhanVienController;
 use App\Http\Controllers\LoaiHopDongController;
+use App\Http\Controllers\LoaiVangController;
+use App\Http\Controllers\NghiPhepController;
 use App\Http\Controllers\NhanVienController;
 use App\Http\Controllers\PhanQuyenController;
 use App\Http\Controllers\PhongBanController;
@@ -112,3 +114,13 @@ Route::post('/admin/phan-quyen/create', [PhanQuyenController::class, 'setQuyen']
 Route::post('/admin/phan-quyen/delete', [PhanQuyenController::class, 'delQuyen']);
 
 Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);
+
+Route::get("/admin/get-loai-vang", [LoaiVangController::class, "getLoaiVang"]);
+Route::post("/admin/them-loai-vang", [LoaiVangController::class, "themLoaiVang"]);
+Route::put("/admin/sua-loai-vang", [LoaiVangController::class, "suaLoaiVang"]);
+Route::delete('/admin/xoa-loai-vang/{id}', [LoaiVangController::class, 'xoaLoaiVang']);
+
+Route::get('/admin/nghi-phep/data', [NghiPhepController::class, 'getData']);
+Route::post('/admin/nghi-phep/create', [NghiPhepController::class, 'store']);
+Route::post('/admin/nghi-phep/update', [NghiPhepController::class, 'update']);
+Route::delete('/admin/nghi-phep/delete/{id}', [NghiPhepController::class, 'delete']);

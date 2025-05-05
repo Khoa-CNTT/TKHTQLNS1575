@@ -11,15 +11,15 @@ class NghiPhep extends Model
      protected $table = 'nghi_pheps';
 
     protected $fillable = [
-        'id_nhan_vien',
+            'id_nhan_vien',
             'id_loai_vang',
             'ngay_bat_dau',
             'ngay_ket_thuc',
             'so_ngay_vang',
             'ly_do',
             'tinh_trang',
-            'nguoi_phe_diet',
-            'ngay_phe_diet',
+            'nguoi_phe_duyet',
+            'ngay_phe_duyet',
             'ghi_chu',
     ];
 }

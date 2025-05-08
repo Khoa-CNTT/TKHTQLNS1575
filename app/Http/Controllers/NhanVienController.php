@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Exports\ExcelLuongExport;
 use App\Exports\ExcelNhanVienExport;
 use App\Exports\ExcelTinhLuongTheoThangExport;
+use App\Http\Requests\LayLaiMatKhauRequest;
 use App\Http\Requests\NhanVienChangeStatusRequest;
 use App\Http\Requests\NhanVienCreateRequest;
 use App\Http\Requests\NhanVienDeleteRequest;
 use App\Http\Requests\NhanVienUpdateRequest;
+use App\Mail\QuenMatKhau;
 use App\Models\ChamCong;
 use App\Models\KpiNhanVien;
 use App\Models\NhanVien;
@@ -16,27 +18,112 @@ use App\Models\PhanQuyen;
 use App\Models\ThongBao;
 use App\Models\ThuongVaPhat;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class NhanVienController extends Controller
 {
+    public function actionLayLaiMatKhau($hash_reset, Request $request)
+    {
+        $khach_hang = NhanVien::where('hash_reset', $hash_reset)->first();
+        if ($khach_hang) {
+            $khach_hang->password = bcrypt($request->password);
+            $khach_hang->hash_reset = null;
+            $khach_hang->save();
+            return response()->json([
+                'status' => true,
+                'message' => "Mật khẩu đã được thay đổi"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Đã có lỗi xảy ra!"
+            ]);
+        }
+    }
+     public function actionQuenMatKhau(Request $request)
+    {
+         try {
+            $quenMK = NhanVien::where('email', $request->email)->first();
+
+            if ($quenMK) {
+                $quenMK->hash_reset = str::uuid();
+                $quenMK->save();
+                Mail::to($request->email)->send(new QuenMatKhau($quenMK->hash_reset, $quenMK->ho_va_ten));
+            }
+            return response()->json([
+                'status' => true,
+                'message' => "Kiểm tra email của bạn !!!"
+            ]);
+        } catch (Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => "Đã có lỗi xảy ra!"
+            ]);
+        }
+    }
     public function thongTin(){
-        $user = Auth::guard('sanctum')->user();
-        if ($user && $user instanceof \App\Models\NhanVien) {
+       $user = Auth::guard('sanctum')->user();
+// o
+       if ($user && $user instanceof \App\Models\NhanVien) {
             return response()->json([
             'data' => $user
         ]);
         } else {
             return response()->json([
                 'status'    =>  false,
-                'message'   =>  'saiiiiiiiiiiiii',
+                'message'   =>  'chưa có thông tin tài khoản!',
             ]);
         }
     }
+    public function updateThongTin(Request $request)
+    {
+        $user = Auth::guard('sanctum')->user();
+
+        if ($user && $user instanceof \App\Models\NhanVien) {
+            NhanVien::where('id', $user->id)->update([
+                'email'             => $request->email,
+                'so_dien_thoai'     => $request->so_dien_thoai,
+                'ho_va_ten'         => $request->ho_va_ten,
+                'dia_chi'           => $request->dia_chi,
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => "Bạn đã cập nhật thông tin thành công!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Có lỗi xảy ra!"
+            ]);
+        }
+    }
+    public function updateMatKhau(LayLaiMatKhauRequest $request)
+    {
+        $user = Auth::guard('sanctum')->user();
+        if ($user && $user instanceof \App\Models\NhanVien) {
+            NhanVien::where('id', $user->id)->update([
+                'password'             => bcrypt($request->password),
+            ]);
+            return response()->json([
+                'status' => true,
+                'message' => "Bạn đã cập nhật mật khẩu thành công!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => "Có lỗi xảy ra!"
+            ]);
+        }
+    }
+
 
     public function dangXuat()
     {
@@ -258,12 +345,6 @@ class NhanVienController extends Controller
     }
     public function login(Request $request)
     {
-        // $res = Http::get("https://www.google.com/recaptcha/api/siteverify", [
-        //     'secret' => '6LfILHgqAAAAAJS-V1KXUY5F8i-2685eUsw4T3hA',
-        //     'response' => $request->ma_captcha
-        // ]);
-
-        // if ($res->json()["success"] == true) {
         $check  =   Auth::guard('nhanvien')->attempt([
             'email'     => $request->email,
             'password'  => $request->password
@@ -289,12 +370,7 @@ class NhanVienController extends Controller
                 'message'   => "Tài khoản hoặc mật khẩu không đúng!",
             ]);
         }
-        // } else {
-        //     return response()->json([
-        //         'status'    => false,
-        //         'message'   => "Mã recaptcha không đúng!",
-        //     ]);
-        // }
+
     }
 
     public function timKiemNhanVien(Request $request)

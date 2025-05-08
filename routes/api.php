@@ -16,6 +16,7 @@ use App\Http\Controllers\ThongBaoController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\ThuongVaPhatController;
 use App\Http\Controllers\TieuChiKPIController;
+use App\Models\NhanVien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,11 @@ Route::post('/admin/tinh-luong-4', [NhanVienController::class, 'tinhLuong4']);
 Route::post('/admin/luong/xuat-excel', [NhanVienController::class, 'xuatExcelLuong']);
 Route::post('/admin/luong-theo-thang/xuat-excel', [NhanVienController::class, 'xuatExcelLuongTheoThang']);
 Route::get('/admin/thong-tin', [NhanVienController::class, 'thongTin']);
+Route::post('/admin/update-thong-tin', [NhanVienController::class, 'updateThongTin']);
+Route::post('/admin/update-mat-khau', [NhanVienController::class, 'updateMatKhau']);
+Route::post('/admin/quen-mat-khau', [NhanVienController::class, 'actionQuenmatKhau']);
+Route::post('/admin/lay-lai-mat-khau/{hash_reset}', [NhanVienController::class, 'actionLayLaiMatKhau']);
+
 
 Route::get('/admin/chuc-vu/data', [ChucVuController::class, 'getData']);
 Route::get('/admin/chuc-vu/data-open', [ChucVuController::class, 'getDataOpen']);

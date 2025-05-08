@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('dia_chi'); // Địa chỉ
             $table->string('so_dien_thoai'); // Số điện thoại
             $table->integer('luong_co_ban'); // Lương Cơ Bản
+            $table->string('hash_reset')->nullable();
             $table->boolean('is_block')->default(0); // Trạng thái khóa tài khoản
             $table->boolean('is_master')->default(0); // Quyền master
             $table->timestamps();

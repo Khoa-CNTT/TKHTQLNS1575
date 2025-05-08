@@ -23,6 +23,7 @@ class NhanVien extends Authenticatable
         'dia_chi',
         'so_dien_thoai',
         'luong_co_ban',
+        'hash_reset',
         'is_block',
         'is_master',
     ];

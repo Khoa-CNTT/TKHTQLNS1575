@@ -122,7 +122,6 @@ Route::post('/admin/phan-quyen/delete', [PhanQuyenController::class, 'delQuyen']
 
 Route::get('/admin/check-login', [NhanVienController::class, 'checkLogin']);
 
-
 Route::get("/admin/get-loai-vang", [LoaiVangController::class, "getLoaiVang"]);
 Route::post("/admin/them-loai-vang", [LoaiVangController::class, "themLoaiVang"]);
 Route::put("/admin/sua-loai-vang", [LoaiVangController::class, "suaLoaiVang"]);

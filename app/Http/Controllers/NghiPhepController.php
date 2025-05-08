@@ -296,3 +296,4 @@ class NghiPhepController extends Controller
         ], 200);
     }
 }
+

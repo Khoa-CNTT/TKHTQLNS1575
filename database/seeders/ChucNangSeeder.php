@@ -91,6 +91,11 @@ class ChucNangSeeder extends Seeder
             ['id' => 73, 'ten_chuc_nang' => 'Thu hồi quyền đã phân'],
             ['id' => 74, 'ten_chuc_nang' => 'Tính lương theo tháng'],
             ['id' => 75, 'ten_chuc_nang' => 'Xuất file excel lương theo tháng'],
+            ['id' => 76, 'ten_chuc_nang' => 'Xem danh sách nghỉ phép'],
+            ['id' => 77, 'ten_chuc_nang' => 'Tạo mới nghỉ phép'],
+            ['id' => 78, 'ten_chuc_nang' => 'Cập nhật nghỉ phép'],
+            ['id' => 79, 'ten_chuc_nang' => 'Xóa nghỉ phép'],
+            //['id' => 80, 'ten_chuc_nang' => 'Xuất file excel nghỉ phép'],
         ]);
     }
 }

@@ -15,15 +15,7 @@ class ThongKeController extends Controller
     public function thongKeChamCong(Request $request)
     {
         $id_chuc_nang = 67;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ChamCong::join('nhan_viens', 'cham_congs.id_nhan_vien', 'nhan_viens.id')
             ->where('cham_congs.ngay_lam_viec', '>=', $request->tu_ngay)
             ->where('cham_congs.ngay_lam_viec', '<=', $request->den_ngay)
@@ -46,15 +38,7 @@ class ThongKeController extends Controller
     public function thongKeKPINhanVien(Request $request)
     {
         $id_chuc_nang = 68;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = KpiNhanVien::join('nhan_viens', 'kpi_nhan_viens.id_nhan_vien', 'nhan_viens.id')
             ->where('kpi_nhan_viens.ngay_danh_gia', '>=', $request->tu_ngay)
             ->where('kpi_nhan_viens.ngay_danh_gia', '<=', $request->den_ngay)
@@ -77,15 +61,7 @@ class ThongKeController extends Controller
     public function thongKeDiemPhat(Request $request)
     {
         $id_chuc_nang = 69;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ThuongVaPhat::join('nhan_viens', 'thuong_va_phats.id_nhan_vien', 'nhan_viens.id')
             ->join('quy_dinh_cho_diems', 'thuong_va_phats.id_quy_dinh', 'quy_dinh_cho_diems.id')
             ->where('thuong_va_phats.ngay', '>=', $request->tu_ngay)
@@ -110,15 +86,7 @@ class ThongKeController extends Controller
     public function thongKeDiemThuong(Request $request)
     {
         $id_chuc_nang = 70;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ThuongVaPhat::join('nhan_viens', 'thuong_va_phats.id_nhan_vien', 'nhan_viens.id')
             ->join('quy_dinh_cho_diems', 'thuong_va_phats.id_quy_dinh', 'quy_dinh_cho_diems.id')
             ->where('thuong_va_phats.ngay', '>=', $request->tu_ngay)

@@ -20,15 +20,7 @@ class ThuongVaPhatController extends Controller
     public function getData()
     {
         $id_chuc_nang = 61;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ThuongVaPhat::join('nhan_viens', 'thuong_va_phats.id_nhan_vien', 'nhan_viens.id')
             ->join('nhan_viens as nv', 'thuong_va_phats.id_nhan_vien_cho_diem', 'nv.id')
             ->join('quy_dinh_cho_diems', 'thuong_va_phats.id_quy_dinh', 'quy_dinh_cho_diems.id',)
@@ -47,15 +39,7 @@ class ThuongVaPhatController extends Controller
     public function store(ThuongVaPhatCreateRequest $request)
     {
         $id_chuc_nang = 62;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $quyDinh = QuyDinhChoDiem::where('id', $request->id_quy_dinh)->first();
 
         ThuongVaPhat::create([
@@ -84,15 +68,7 @@ class ThuongVaPhatController extends Controller
     public function updateThuongPhat(ThuongVaPhatUpdateRequest $request)
     {
         $id_chuc_nang = 63;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $quyDinh = QuyDinhChoDiem::where('id', $request->id_quy_dinh)->first();
         ThuongVaPhat::where('id', $request->id)->update([
             'id_nhan_vien'          => $request->id_nhan_vien,
@@ -121,15 +97,7 @@ class ThuongVaPhatController extends Controller
     public function deleteThuongPhat(ThuongVaPhatDeleteRequest $request)
     {
         $id_chuc_nang = 64;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         ThuongVaPhat::where('id', $request->id)->delete();
         // Lưu log
         ThongBao::create([
@@ -149,15 +117,7 @@ class ThuongVaPhatController extends Controller
     public function timKiemThuongPhat(Request $request)
     {
         $id_chuc_nang = 65;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ThuongVaPhat::join('nhan_viens', 'thuong_va_phats.id_nhan_vien', 'nhan_viens.id')
             ->join('nhan_viens as nv', 'thuong_va_phats.id_nhan_vien_cho_diem', 'nv.id')
             ->join('quy_dinh_cho_diems', 'thuong_va_phats.id_quy_dinh', 'quy_dinh_cho_diems.id',)
@@ -178,15 +138,7 @@ class ThuongVaPhatController extends Controller
     public function xuatExcelThuongVaPhat()
     {
         $id_chuc_nang = 66;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ThuongVaPhat::join('nhan_viens', 'thuong_va_phats.id_nhan_vien', 'nhan_viens.id')
             ->join('nhan_viens as nv', 'thuong_va_phats.id_nhan_vien_cho_diem', 'nv.id')
             ->join('quy_dinh_cho_diems', 'thuong_va_phats.id_quy_dinh', 'quy_dinh_cho_diems.id',)

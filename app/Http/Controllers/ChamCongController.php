@@ -23,15 +23,7 @@ class ChamCongController extends Controller
     public function getData()
     {
         $id_chuc_nang = 56;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        };
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ChamCong::join('nhan_viens', 'cham_congs.id_nhan_vien', 'nhan_viens.id')
             ->join('phong_bans', 'nhan_viens.id_phong_ban', 'phong_bans.id')
             ->select('cham_congs.*', 'nhan_viens.ho_va_ten', 'phong_bans.ten_phong_ban',)
@@ -44,15 +36,7 @@ class ChamCongController extends Controller
     public function store(ChamCongCreateRequest $request)
     {
         $id_chuc_nang = 57;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        };
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         ChamCong::create([
             'id_nhan_vien'      => $request->id_nhan_vien,
             'ngay_lam_viec'     => $request->ngay_lam_viec,
@@ -75,15 +59,7 @@ class ChamCongController extends Controller
     public function updateChamCong(ChamCongUpdateRequest $request)
     {
         $id_chuc_nang = 59;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        };
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $cham_cong = ChamCong::where('id', $request->id)->first();
         if (!$cham_cong) {
             return response()->json([
@@ -113,15 +89,7 @@ class ChamCongController extends Controller
     public function deleteChamCong(ChamCongDeleteRequest $request)
     {
         $id_chuc_nang = 58;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        };
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         ChamCong::where('id', $request->id)->delete();
         // Lưu log
         ThongBao::create([
@@ -140,15 +108,7 @@ class ChamCongController extends Controller
     public function xuatExcelChamCong()
     {
         $id_chuc_nang = 60;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        };
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ChamCong::join('nhan_viens', 'cham_congs.id_nhan_vien', 'nhan_viens.id')
             ->join('phong_bans', 'nhan_viens.id_phong_ban', 'phong_bans.id')
             ->select('cham_congs.*', 'nhan_viens.ho_va_ten', 'phong_bans.ten_phong_ban',)

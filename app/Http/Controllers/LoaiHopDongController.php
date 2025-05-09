@@ -19,15 +19,7 @@ class LoaiHopDongController extends Controller
     public function getData()
     {
         $id_chuc_nang = 39;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = LoaiHopDong::get();
 
         return response()->json([
@@ -38,15 +30,7 @@ class LoaiHopDongController extends Controller
     public function getDataOpen()
     {
         $id_chuc_nang = 40;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = LoaiHopDong::where('tinh_trang', 1)->get();
 
         return response()->json([
@@ -57,15 +41,7 @@ class LoaiHopDongController extends Controller
     public function store(LoaiHopDongCreateRequest $request)
     {
         $id_chuc_nang = 41;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         LoaiHopDong::create([
             'ten_hop_dong'  => $request->ten_hop_dong,
             'noi_dung'      => $request->noi_dung,
@@ -89,15 +65,7 @@ class LoaiHopDongController extends Controller
     public function changeStatus(LoaiHopDongChangeStatusRequest $request)
     {
         $id_chuc_nang = 42;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $loai_hop_dong = LoaiHopDong::find($request->id);
         if ($loai_hop_dong) {
             $loai_hop_dong->tinh_trang = !$loai_hop_dong->tinh_trang;
@@ -121,15 +89,7 @@ class LoaiHopDongController extends Controller
     public function updateLoaiHopDong(LoaiHopDongUpdateRequest $request)
     {
         $id_chuc_nang = 43;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         LoaiHopDong::where('id', $request->id)->update([
             'ten_hop_dong'  => $request->ten_hop_dong,
             'noi_dung'      => $request->noi_dung,
@@ -153,15 +113,7 @@ class LoaiHopDongController extends Controller
     public function deleteLoaiHopDong(LoaiHopDongDeleteRequest $request)
     {
         $id_chuc_nang = 44;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         LoaiHopDong::where('id', $request->id)->delete();
 
         // Lưu log
@@ -182,15 +134,7 @@ class LoaiHopDongController extends Controller
     public function xuatExcelLoaiHopDong()
     {
         $id_chuc_nang = 45;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = LoaiHopDong::get();
 
         foreach ($data as $key => $value) {

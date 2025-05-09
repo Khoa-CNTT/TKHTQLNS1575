@@ -19,15 +19,7 @@ class QuyDinhChoDiemController extends Controller
     public function getData()
     {
         $id_chuc_nang = 32;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = QuyDinhChoDiem::get();
 
         return response()->json([
@@ -37,15 +29,7 @@ class QuyDinhChoDiemController extends Controller
     public function getDataOpen()
     {
         $id_chuc_nang = 33;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = QuyDinhChoDiem::where('tinh_trang', 1)->get();
 
         return response()->json([
@@ -56,15 +40,7 @@ class QuyDinhChoDiemController extends Controller
     public function store(QDCDCreateRequest $request)
     {
         $id_chuc_nang = 34;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         QuyDinhChoDiem::create([
             'ma_so'         => $request->ma_so,
             'noi_dung'      => $request->noi_dung,
@@ -91,15 +67,7 @@ class QuyDinhChoDiemController extends Controller
     public function updateQuyDinhChoDiem(QDCDUpdateRequest $request)
     {
         $id_chuc_nang = 36;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         QuyDinhChoDiem::where('id', $request->id)->update([
             'ma_so'         => $request->ma_so,
             'noi_dung'      => $request->noi_dung,
@@ -126,15 +94,7 @@ class QuyDinhChoDiemController extends Controller
     public function deleteQuyDinhChoDiem(QDCDDeleteRequest $request)
     {
         $id_chuc_nang = 37;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         QuyDinhChoDiem::where('id', $request->id)->delete();
 
         // Lưu log
@@ -154,15 +114,7 @@ class QuyDinhChoDiemController extends Controller
     public function changeStatus(QDCDChangeStatusRequest $request)
     {
         $id_chuc_nang = 35;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $quy_dinh_cho_diem = QuyDinhChoDiem::find($request->id);
         if ($quy_dinh_cho_diem) {
             $quy_dinh_cho_diem->tinh_trang = !$quy_dinh_cho_diem->tinh_trang;
@@ -187,15 +139,7 @@ class QuyDinhChoDiemController extends Controller
     public function xuatExcelQuyDinhChoDiem()
     {
         $id_chuc_nang = 38;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = QuyDinhChoDiem::get();
 
         foreach ($data as $key => $value) {

@@ -19,15 +19,7 @@ class TieuChiKPIController extends Controller
     public function getData()
     {
         $id_chuc_nang = 25;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = TieuChiKPI::get();
 
         return response()->json([
@@ -37,15 +29,7 @@ class TieuChiKPIController extends Controller
     public function getDataOpen()
     {
         $id_chuc_nang = 26;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = TieuChiKPI::where('tinh_trang', 1)->get();
 
         return response()->json([
@@ -57,15 +41,7 @@ class TieuChiKPIController extends Controller
     public function store(TieuChiKpiCreateRequest $request)
     {
         $id_chuc_nang = 27;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         TieuChiKPI::create([
             'ten_tieu_chi'  => $request->ten_tieu_chi,
             'mo_ta'         => $request->mo_ta,
@@ -90,15 +66,7 @@ class TieuChiKPIController extends Controller
     public function changeStatus(TieuChiKpiChangeStatusRequest $request)
     {
         $id_chuc_nang = 28;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $tieu_chi_kpi = TieuChiKPI::find($request->id);
         if ($tieu_chi_kpi) {
             $tieu_chi_kpi->tinh_trang = !$tieu_chi_kpi->tinh_trang;
@@ -122,15 +90,7 @@ class TieuChiKPIController extends Controller
     public function updateTieuChiKPI(TieuChiKpiUpdateRequest $request)
     {
         $id_chuc_nang = 29;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         TieuChiKPI::where('id', $request->id)->update([
             'ten_tieu_chi'  => $request->ten_tieu_chi,
             'mo_ta'         => $request->mo_ta,
@@ -155,15 +115,7 @@ class TieuChiKPIController extends Controller
     public function deleteTieuChiKPI(TieuChiKpiDeleteRequest $request)
     {
         $id_chuc_nang = 30;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         TieuChiKPI::where('id', $request->id)->delete();
 
         // Lưu log
@@ -184,15 +136,7 @@ class TieuChiKPIController extends Controller
     public function xuatExcelTieuChiPKI()
     {
         $id_chuc_nang = 31;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = TieuChiKPI::get();
 
         foreach ($data as $key => $value) {

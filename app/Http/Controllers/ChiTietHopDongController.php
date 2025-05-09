@@ -16,15 +16,7 @@ class ChiTietHopDongController extends Controller
     public function getData()
     {
         $id_chuc_nang = 46;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ChiTietHopDong::join('nhan_viens', 'nhan_viens.id', 'chi_tiet_hop_dongs.id_nhan_vien')
             ->join('loai_hop_dongs', 'loai_hop_dongs.id', 'chi_tiet_hop_dongs.id_loai_hop_dong')
             ->get();
@@ -37,15 +29,7 @@ class ChiTietHopDongController extends Controller
     public function store(NhanVienCreateHopDongRequest $request)
     {
         $id_chuc_nang = 47;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         ChiTietHopDong::create([
             'id_nhan_vien'          => $request->id,
             'id_loai_hop_dong'      => $request->id_loai_hop_dong,
@@ -73,15 +57,7 @@ class ChiTietHopDongController extends Controller
     public function xuatExcelChiTietHopDong()
     {
         $id_chuc_nang = 48;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ChiTietHopDong::join('nhan_viens', 'nhan_viens.id', 'chi_tiet_hop_dongs.id_nhan_vien')
             ->join('loai_hop_dongs', 'loai_hop_dongs.id', 'chi_tiet_hop_dongs.id_loai_hop_dong')
             ->get();

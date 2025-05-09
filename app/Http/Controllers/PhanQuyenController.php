@@ -15,15 +15,7 @@ class PhanQuyenController extends Controller
     public function getListChucNang(Request $request)
     {
         $id_chuc_nang = 71;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+$user_login = $this->checkPhanQuyen($id_chuc_nang);
 
         $data = ChucNang::get();
 
@@ -47,15 +39,7 @@ class PhanQuyenController extends Controller
     public function setQuyen(SetQuyenRequest $request)
     {
         $id_chuc_nang = 72;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+$user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhanQuyen::FirstOrCreate([
             'id_nhan_vien'  =>  $request->id_nhan_vien,
             'id_chuc_nang'  =>  $request->id,
@@ -77,15 +61,7 @@ class PhanQuyenController extends Controller
     public function delQuyen(Request $request)
     {
         $id_chuc_nang = 73;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+$user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhanQuyen::where('id', $request->id_phan_quyen)->delete();
 
         // Lưu log

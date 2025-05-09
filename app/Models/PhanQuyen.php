@@ -12,7 +12,7 @@ class PhanQuyen extends Model
     protected $table = 'phan_quyens';
 
     protected $fillable = [
-        'id_nhan_vien',
+        'id_chuc_vu',
         'id_chuc_nang'
     ];
 }

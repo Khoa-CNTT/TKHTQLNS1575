@@ -8,6 +8,7 @@ use App\Http\Requests\ChucVuCreateRequest;
 use App\Http\Requests\ChucVuDeleteRequest;
 use App\Http\Requests\ChucVuUpdateRequest;
 use App\Models\ChucVu;
+use App\Models\NhanVien;
 use App\Models\PhanQuyen;
 use App\Models\ThongBao;
 use Illuminate\Http\Request;
@@ -20,15 +21,9 @@ class ChucVuController extends Controller
     public function getData()
     {
         $id_chuc_nang = 11;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $this->checkPhanQuyen($id_chuc_nang);
+
         $data = ChucVu::get();
 
         return response()->json([
@@ -39,15 +34,8 @@ class ChucVuController extends Controller
     public function getDataOpen()
     {
         $id_chuc_nang = 12;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+        $this->checkPhanQuyen($id_chuc_nang);
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
         $data = ChucVu::where('tinh_trang', 1)->get();
 
         return response()->json([
@@ -58,15 +46,8 @@ class ChucVuController extends Controller
     public function store(ChucVuCreateRequest $request)
     {
         $id_chuc_nang = 13;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
         ChucVu::create([
             'ten_chuc_vu'   => $request->ten_chuc_vu,
             'tinh_trang'    => $request->tinh_trang,
@@ -89,15 +70,8 @@ class ChucVuController extends Controller
     public function changeStatus(ChucVuChangeStatusRequest $request)
     {
         $id_chuc_nang = 14;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
         $chuc_vu = ChucVu::find($request->id);
         if ($chuc_vu) {
             $chuc_vu->tinh_trang = !$chuc_vu->tinh_trang;
@@ -121,15 +95,8 @@ class ChucVuController extends Controller
     public function updateChucVu(ChucVuUpdateRequest $request)
     {
         $id_chuc_nang = 15;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
         ChucVu::where('id', $request->id)->update([
             'ten_chuc_vu'   => $request->ten_chuc_vu,
             'tinh_trang'    => $request->tinh_trang,
@@ -152,15 +119,8 @@ class ChucVuController extends Controller
     public function deleteChucVu(ChucVuDeleteRequest $request)
     {
         $id_chuc_nang = 16;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
         ChucVu::where('id', $request->id)->delete();
 
         // Lưu log
@@ -181,15 +141,8 @@ class ChucVuController extends Controller
     public function xuatExcelChucVu()
     {
         $id_chuc_nang = 17;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
-        if(!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
         $data = ChucVu::get();
 
         foreach ($data as $key => $value) {

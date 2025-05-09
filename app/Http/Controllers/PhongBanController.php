@@ -19,15 +19,7 @@ class PhongBanController extends Controller
     public function getData()
     {
         $id_chuc_nang = 18;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = PhongBan::get();
 
         return response()->json([
@@ -38,15 +30,7 @@ class PhongBanController extends Controller
     public function getDataOpen()
     {
         $id_chuc_nang = 19;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = PhongBan::where('tinh_trang', 1)->get();
 
         return response()->json([
@@ -57,15 +41,7 @@ class PhongBanController extends Controller
     public function store(CreatePhongBanRequest $request)
     {
         $id_chuc_nang = 20;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhongBan::create([
             'ten_phong_ban'     => $request->ten_phong_ban,
             'id_phong_ban_cha'  => $request->id_phong_ban_cha,
@@ -90,15 +66,7 @@ class PhongBanController extends Controller
     public function changeStatus(PhongBanChangeStatusRequest $request)
     {
         $id_chuc_nang = 21;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $phong_ban = PhongBan::find($request->id);
         if ($phong_ban) {
             $phong_ban->tinh_trang = !$phong_ban->tinh_trang;
@@ -122,15 +90,7 @@ class PhongBanController extends Controller
     public function updatePhongBan(PhongBanUpdateRequest $request)
     {
         $id_chuc_nang = 22;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhongBan::where('id', $request->id)->update([
             'ten_phong_ban'     => $request->ten_phong_ban,
             'id_phong_ban_cha'  => $request->id_phong_ban_cha,
@@ -155,15 +115,7 @@ class PhongBanController extends Controller
     public function deletePhongBan(PhongBanDeleteRequest $request)
     {
         $id_chuc_nang = 23;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhongBan::where('id', $request->id)->delete();
 
         // Lưu log
@@ -184,15 +136,7 @@ class PhongBanController extends Controller
     public function xuatExcelPhongBan()
     {
         $id_chuc_nang = 24;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = PhongBan::get();
 
         foreach ($data as $key => $value) {

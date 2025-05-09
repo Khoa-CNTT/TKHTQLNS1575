@@ -57,7 +57,7 @@ class NhanVienSeeder extends Seeder
             ],
             [
                 'id_phong_ban'   => 3, // Ban Tài Chính
-                'id_chuc_vu'     => 3, // Trưởng Phòng
+                'id_chuc_vu'     => 6, // Trưởng Phòng
                 'ho_va_ten'      => 'Lê Văn C',
                 'email'          => 'levanc@example.com',
                 'password'       => bcrypt('123456'),

@@ -168,20 +168,20 @@ class NhanVienController extends Controller
     public function getData()
     {
         $id_chuc_nang = 1;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
         $data = NhanVien::join('phong_bans', 'phong_bans.id', 'nhan_viens.id_phong_ban')
-            ->join('chuc_vus', 'chuc_vus.id', 'nhan_viens.id_chuc_vu')
-            ->select('nhan_viens.*', 'chuc_vus.ten_chuc_vu', 'phong_bans.ten_phong_ban')
-            ->get();
+                        ->join('chuc_vus as chuc_vu', 'chuc_vu.id', 'nhan_viens.id_chuc_vu')
+                        ->leftJoin('chuc_vus as cap_tren', 'cap_tren.id', 'chuc_vu.id_chuc_vu_cha')
+                        ->leftJoin('nhan_viens as ten_cap_trens', 'ten_cap_trens.id_chuc_vu', 'cap_tren.id')
+                        ->select(
+                            'nhan_viens.*',
+                            'phong_bans.ten_phong_ban',
+                            'chuc_vu.ten_chuc_vu as ten_chuc_vu',
+                            'chuc_vu.id_chuc_vu_cha',
+                            'ten_cap_trens.ho_va_ten as ten_cap_tren'
+                        )
+                        ->get();
 
         return response()->json([
             'data' => $data
@@ -190,15 +190,7 @@ class NhanVienController extends Controller
     public function getDataOpen()
     {
         $id_chuc_nang = 2;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = NhanVien::where('is_block', 0)
             ->get();
 
@@ -210,15 +202,7 @@ class NhanVienController extends Controller
     public function store(NhanVienCreateRequest $request)
     {
         $id_chuc_nang = 4;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         NhanVien::create([
             'id_phong_ban'          => $request->id_phong_ban,
             'id_chuc_vu'            => $request->id_chuc_vu,
@@ -248,15 +232,7 @@ class NhanVienController extends Controller
     public function changeStatus(NhanVienChangeStatusRequest $request)
     {
         $id_chuc_nang = 5;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $nhan_vien = NhanVien::find($request->id);
         if ($nhan_vien) {
             $nhan_vien->is_block = !$nhan_vien->is_block;
@@ -280,15 +256,7 @@ class NhanVienController extends Controller
     public function updateNhanVien(NhanVienUpdateRequest $request)
     {
         $id_chuc_nang = 6;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         NhanVien::where('id', $request->id)->update([
             'id_phong_ban'          => $request->id_phong_ban,
             'id_chuc_vu'            => $request->id_chuc_vu,
@@ -318,15 +286,7 @@ class NhanVienController extends Controller
     public function deleteNhanVien(NhanVienDeleteRequest $request)
     {
         $id_chuc_nang = 7;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         NhanVien::where('id', $request->id)->delete();
 
         // Lưu log
@@ -376,15 +336,7 @@ class NhanVienController extends Controller
     public function timKiemNhanVien(Request $request)
     {
         $id_chuc_nang = 3;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = NhanVien::where('ho_va_ten', 'like', '%' . $request->noi_dung . '%')->get();
         return response()->json([
             'data'   => $data,
@@ -394,15 +346,7 @@ class NhanVienController extends Controller
     public function xuatExcelNhanVien()
     {
         $id_chuc_nang = 8;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = NhanVien::join('phong_bans', 'phong_bans.id', 'nhan_viens.id_phong_ban')
             ->join('chuc_vus', 'chuc_vus.id', 'nhan_viens.id_chuc_vu')
             ->select('nhan_viens.*', 'chuc_vus.ten_chuc_vu', 'phong_bans.ten_phong_ban')
@@ -418,15 +362,7 @@ class NhanVienController extends Controller
     public function xuatExcelLuongTheoThang(Request $request)
     {
         $id_chuc_nang = 75;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $result = NhanVien::select('id as id_nhan_vien', 'ho_va_ten', 'luong_co_ban')->get();
         for ($i = 1; $i <= 12; $i++) {
             $data = $this->tinhLuongThang($i, $request->year);
@@ -446,15 +382,7 @@ class NhanVienController extends Controller
     public function tinhLuong4(Request $request)
     {
         $id_chuc_nang = 74;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $result = NhanVien::select('id as id_nhan_vien', 'ho_va_ten', 'luong_co_ban')->get();
         for ($i = 1; $i <= 12; $i++) {
             $data = $this->tinhLuongThang($i, $request->year);
@@ -547,15 +475,7 @@ class NhanVienController extends Controller
     public function tinhLuong(Request $request)
     {
         $id_chuc_nang = 9;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        }
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data = ChamCong::select('id_nhan_vien', 'ca_lam', DB::raw("COUNT(ca_lam) as so_buoi"))
             ->groupBy('id_nhan_vien', 'ca_lam')
             ->whereDate('ngay_lam_viec', '>=', $request->begin)
@@ -622,15 +542,7 @@ class NhanVienController extends Controller
     public function xuatExcelLuong(Request $request)
     {
         $id_chuc_nang = 10;
-        $user_login = Auth::guard('sanctum')->user();
-        $check = PhanQuyen::where('id_nhan_vien', $user_login->id)->where('id_chuc_nang', $id_chuc_nang)->first();
-
-        if (!$check) {
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-            ]);
-        };
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);;
         $data = ChamCong::select('id_nhan_vien', 'ca_lam', DB::raw("COUNT(ca_lam) as so_buoi"))
             ->groupBy('id_nhan_vien', 'ca_lam')
             ->whereDate('ngay_lam_viec', '>=', $request->begin)

@@ -10,6 +10,7 @@ use App\Http\Requests\KPINhanVienDeleteRequest;
 use App\Http\Requests\KPINhanVienUpdateRequest;
 use App\Http\Requests\UpdateKPINhanVienRequest;
 use App\Models\KpiNhanVien;
+use App\Models\NghiPhep;
 use App\Models\PhanQuyen;
 use App\Models\ThongBao;
 use App\Models\TieuChiKPI;
@@ -29,7 +30,12 @@ class KpiNhanVienController extends Controller
             ->join('tieu_chi_kpis', 'tieu_chi_kpis.id', 'kpi_nhan_viens.id_tieu_chi')
             ->select('kpi_nhan_viens.*', 'nhan_viens.ho_va_ten', 'tieu_chi_kpis.ten_tieu_chi', 'nv.ho_va_ten as ten_nhan_vien_danh_gia')
             ->get();
-
+        $nghi_phep = NghiPhep::where('id_nhan_vien', $user_login->id)->get();
+        if (!$nghi_phep) {
+            return response()->json([
+                'data' => []
+            ]);
+        }
         return response()->json([
             'data' => $data
         ]);

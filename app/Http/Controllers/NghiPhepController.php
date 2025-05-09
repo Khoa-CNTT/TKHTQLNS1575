@@ -131,8 +131,15 @@ class NghiPhepController extends Controller
             'nghi_pheps.*',
             'loai_vangs.ten_loai_vang',
             'nhan_viens.ho_va_ten'
-        )
+        )->where('nghi_pheps.id_nhan_vien', $user_login->id)
             ->get();
+
+        if (!$nghiPhep) {
+            return response()->json([
+                'status' => 200,
+                'nghiPhep' => []
+            ], 200);
+        }
 
         return response()->json([
             'status' => 200,
@@ -476,7 +483,10 @@ class NghiPhepController extends Controller
                 ], 401); // 401 Unauthorized
             }
 
-            $nguoi_duyet = NhanVien::where('id', $user_login->id)->first();
+
+
+
+
             $nghi_phep = NghiPhep::find($request->id);
             if (!$nghi_phep) {
                 return response()->json([
@@ -486,8 +496,8 @@ class NghiPhepController extends Controller
             }
             $nghi_phep->update([
                 'tinh_trang' => 2,
-                'nguoi_phe_diet' => $nguoi_duyet->ho_va_ten,
-                'ngay_phe_diet' => now(),
+                'nguoi_phe_duyet' => $request->nguoi_phe_duyet,
+                'ngay_phe_duyet' => now(),
             ]);
 
             return response()->json([

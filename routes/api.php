@@ -137,4 +137,9 @@ Route::get('/admin/bao-cao-vang/xuat-excel', [NghiPhepController::class, 'xuatEx
 Route::post("/admin/trang-thai-chap-nhan", [NghiPhepController::class, "trangThaiChapNhan"]);
 Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamCongNtf']);
 
+Route::get('/admin/nghi-phep/data', [NghiPhepController::class, 'getData']);
+Route::post('/admin/nghi-phep/create', [NghiPhepController::class, 'store']);
+Route::post('/admin/nghi-phep/update', [NghiPhepController::class, 'update']);
+Route::delete('/admin/nghi-phep/delete/{id}', [NghiPhepController::class, 'delete']);
+
 Route::get('/get-ip', [ConfigController::class, 'configIP']);

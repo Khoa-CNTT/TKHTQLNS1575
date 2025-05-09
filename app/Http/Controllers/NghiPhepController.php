@@ -343,16 +343,7 @@ class NghiPhepController extends Controller
 
 
             $id_chuc_nang = 77;
-            $check = PhanQuyen::where('id_nhan_vien', $user_login->id)
-                ->where('id_chuc_nang', $id_chuc_nang)
-                ->first();
-
-            if (!$check) {
-                return response()->json([
-                    'status'    =>  false,
-                    'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-                ]);
-            }
+            $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
             $startDate = new \DateTime($request->ngay_bat_dau);
             $endDate = new \DateTime($request->ngay_ket_thuc);

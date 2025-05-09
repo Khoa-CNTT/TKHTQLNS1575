@@ -28,8 +28,6 @@ class NghiPhepController extends Controller
 
 
         $messages = [
-            'id_nhan_vien.required' => 'Vui lòng chọn nhân viên',
-            'id_nhan_vien.exists' => 'Nhân viên không tồn tại trong hệ thống',
             'id_loai_vang.required' => 'Vui lòng chọn loại vắng',
             'id_loai_vang.exists' => 'Loại vắng không tồn tại trong hệ thống',
             'ngay_bat_dau.required' => 'Vui lòng chọn ngày bắt đầu',
@@ -42,7 +40,6 @@ class NghiPhepController extends Controller
         ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
-            'id_nhan_vien' => 'required|exists:nhan_viens,id',
             'id_loai_vang' => 'required|exists:loai_vangs,id',
             'ngay_bat_dau' => 'required|date',
             'ngay_ket_thuc' => 'required|date|after_or_equal:ngay_bat_dau',
@@ -63,7 +60,7 @@ class NghiPhepController extends Controller
         $interval = date_diff($startDate, $endDate);
 
         $nghiPhep = NghiPhep::create([
-            'id_nhan_vien' => $request->id_nhan_vien,
+            'id_nhan_vien' => $user_login->id,
             'id_loai_vang' => $request->id_loai_vang,
             'ngay_bat_dau' => $request->ngay_bat_dau,
             'ngay_ket_thuc' => $request->ngay_ket_thuc,
@@ -89,59 +86,52 @@ class NghiPhepController extends Controller
                 'message' => 'Bạn không có quyền truy cập',
             ], 401);
         }
-        $query = NghiPhep::query();
+
+        $query = NghiPhep::query()
+            ->join('loai_vangs', 'nghi_pheps.id_loai_vang', '=', 'loai_vangs.id')
+            ->join('nhan_viens', 'nghi_pheps.id_nhan_vien', '=', 'nhan_viens.id');
 
         // Filter by id_nhan_vien if provided
-        if ($request->has('id_nhan_vien') && $request->id_nhan_vien != null) {
-            $query->where('id_nhan_vien', $request->id_nhan_vien);
+        if ($request->filled('id_nhan_vien')) {
+            $query->where('nghi_pheps.id_nhan_vien', $request->id_nhan_vien);
         }
 
         // Filter by id_loai_vang if provided
-        if ($request->has('id_loai_vang') && $request->id_loai_vang != null) {
-            $query->where('id_loai_vang', $request->id_loai_vang);
+        if ($request->filled('id_loai_vang')) {
+            $query->where('nghi_pheps.id_loai_vang', $request->id_loai_vang);
         }
 
-        // Search for records between two dates
-        if (
-            $request->has('tu_ngay') && $request->tu_ngay != null &&
-            $request->has('den_ngay') && $request->den_ngay != null
-        ) {
-            // Find records where the absence period overlaps with the search period
+        // Filter by date range
+        if ($request->filled('tu_ngay') && $request->filled('den_ngay')) {
             $query->where(function ($q) use ($request) {
-                // Case 1: Start date falls within search period
-                $q->whereBetween('ngay_bat_dau', [$request->tu_ngay, $request->den_ngay])
-                    // Case 2: End date falls within search period
-                    ->orWhereBetween('ngay_ket_thuc', [$request->tu_ngay, $request->den_ngay])
-                    // Case 3: Absence period completely contains search period
-                    ->orWhere(function ($query) use ($request) {
-                        $query->where('ngay_bat_dau', '<=', $request->tu_ngay)
-                            ->where('ngay_ket_thuc', '>=', $request->den_ngay);
+                $q->whereBetween('nghi_pheps.ngay_bat_dau', [$request->tu_ngay, $request->den_ngay])
+                    ->orWhereBetween('nghi_pheps.ngay_ket_thuc', [$request->tu_ngay, $request->den_ngay])
+                    ->orWhere(function ($sub) use ($request) {
+                        $sub->where('nghi_pheps.ngay_bat_dau', '<=', $request->tu_ngay)
+                            ->where('nghi_pheps.ngay_ket_thuc', '>=', $request->den_ngay);
                     });
             });
         } else {
-            // If only one date is provided, use the existing filters
-            if ($request->has('ngay_bat_dau') && $request->ngay_bat_dau != null) {
-                $query->whereDate('ngay_bat_dau', '>=', $request->ngay_bat_dau);
+            if ($request->filled('ngay_bat_dau')) {
+                $query->whereDate('nghi_pheps.ngay_bat_dau', '>=', $request->ngay_bat_dau);
             }
 
-            if ($request->has('ngay_ket_thuc') && $request->ngay_ket_thuc != null) {
-                $query->whereDate('ngay_ket_thuc', '<=', $request->ngay_ket_thuc);
+            if ($request->filled('ngay_ket_thuc')) {
+                $query->whereDate('nghi_pheps.ngay_ket_thuc', '<=', $request->ngay_ket_thuc);
             }
         }
 
         // Filter by tinh_trang if provided
-        if ($request->has('tinh_trang') && $request->tinh_trang !== null) {
-            $query->where('tinh_trang', $request->tinh_trang);
+        if ($request->filled('tinh_trang')) {
+            $query->where('nghi_pheps.tinh_trang', $request->tinh_trang);
         }
 
-        // Get the results with related data from loai_vangs and nhan_viens tables
-        $nghiPhep = $query->join('loai_vangs', 'nghi_pheps.id_loai_vang', '=', 'loai_vangs.id')
-            ->join('nhan_viens', 'nghi_pheps.id_nhan_vien', '=', 'nhan_viens.id')
-            ->select(
-                'nghi_pheps.*',
-                'loai_vangs.ten_loai_vang',
-                'nhan_viens.ho_va_ten'
-            )
+        // Select fields explicitly
+        $nghiPhep = $query->select(
+            'nghi_pheps.*',
+            'loai_vangs.ten_loai_vang',
+            'nhan_viens.ho_va_ten'
+        )
             ->get();
 
         return response()->json([
@@ -330,8 +320,8 @@ class NghiPhepController extends Controller
 
             $id_chuc_nang = 77;
             $check = PhanQuyen::where('id_nhan_vien', $user_login->id)
-                              ->where('id_chuc_nang', $id_chuc_nang)
-                              ->first();
+                ->where('id_chuc_nang', $id_chuc_nang)
+                ->first();
 
             if (!$check) {
                 return response()->json([
@@ -341,9 +331,9 @@ class NghiPhepController extends Controller
             }
 
             $startDate = new \DateTime($request->ngay_bat_dau);
-             $endDate = new \DateTime($request->ngay_ket_thuc);
+            $endDate = new \DateTime($request->ngay_ket_thuc);
 
-        $interval = date_diff($startDate, $endDate);
+            $interval = date_diff($startDate, $endDate);
             $nghi_phep = NghiPhep::create([
                 'id_nhan_vien' => $request->id_nhan_vien,
                 'id_loai_vang' => $request->id_loai_vang,
@@ -387,8 +377,8 @@ class NghiPhepController extends Controller
 
             $id_chuc_nang = 78;
             $check = PhanQuyen::where('id_nhan_vien', $user_login->id)
-                              ->where('id_chuc_nang', $id_chuc_nang)
-                              ->first();
+                ->where('id_chuc_nang', $id_chuc_nang)
+                ->first();
 
             if (!$check) {
                 return response()->json([
@@ -399,7 +389,7 @@ class NghiPhepController extends Controller
 
             $nghi_phep = NghiPhep::find($request->id);
             $nghi_phep->update([
-                'id_nhan_vien' => $request->id_nhan_vien,
+                'id_nhan_vien' => $user_login->id,
                 'id_loai_vang' => $request->id_loai_vang,
                 'ngay_bat_dau' => $request->ngay_bat_dau,
                 'ngay_ket_thuc' => $request->ngay_ket_thuc,
@@ -441,8 +431,8 @@ class NghiPhepController extends Controller
 
             $id_chuc_nang = 79;
             $check = PhanQuyen::where('id_nhan_vien', $user_login->id)
-                              ->where('id_chuc_nang', $id_chuc_nang)
-                              ->first();
+                ->where('id_chuc_nang', $id_chuc_nang)
+                ->first();
 
             if (!$check) {
                 return response()->json([
@@ -452,7 +442,7 @@ class NghiPhepController extends Controller
             }
 
             $nghi_phep = NghiPhep::find($id);
-            if(!$nghi_phep){
+            if (!$nghi_phep) {
                 return response()->json([
                     'status'    =>  false,
                     'message'   =>  'Nghỉ phép không tồn tại!'
@@ -474,6 +464,45 @@ class NghiPhepController extends Controller
             ], 500);
         }
     }
+    public function trangThaiTuChoi(Request $request)
+    {
+        try {
+            $user_login = Auth::guard('sanctum')->user();
 
+            if (!$user_login) {
+                return response()->json([
+                    'status'    =>  false,
+                    'message'   =>  'Bạn cần đăng nhập để sử dụng chức năng này!'
+                ], 401); // 401 Unauthorized
+            }
+
+            $nguoi_duyet = NhanVien::where('id', $user_login->id)->first();
+            $nghi_phep = NghiPhep::find($request->id);
+            if (!$nghi_phep) {
+                return response()->json([
+                    'status'    =>  404,
+                    'message'   =>  'Nghị phép khong ton tai!'
+                ]);
+            }
+            $nghi_phep->update([
+                'tinh_trang' => 2,
+                'nguoi_phe_diet' => $nguoi_duyet->ho_va_ten,
+                'ngay_phe_diet' => now(),
+            ]);
+
+            return response()->json([
+                'status'    =>  200,
+                'message'   =>  'Đã cập nhật nghị phép thành cong!',
+                'data'      =>  $nghi_phep
+            ]);
+        } catch (\Exception $e) {
+            // Log lỗi
+            Log::error('NghiPhep update error: ' . $e->getMessage());
+
+            return response()->json([
+                'status'    =>  false,
+                'message'   =>  'Đã xảy ra lỗi: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }
-

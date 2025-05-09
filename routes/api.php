@@ -129,7 +129,7 @@ Route::delete('/admin/xoa-loai-vang/{id}', [LoaiVangController::class, 'xoaLoaiV
 
 
 
-Route::post("/admin/them-bao-cao-vang", [NghiPhepController::class, "themBaoCaoVang"]);
+Route::post("/admin/them-bao-cao-vang-di-cong-tac", [NghiPhepController::class, "themBaoCaoVangDiCongTac"]);
 Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang"]);
 Route::put("/admin/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVang"]);
 Route::delete('/admin/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVang']);
@@ -140,6 +140,7 @@ Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamC
 
 Route::get('/admin/nghi-phep/data', [NghiPhepController::class, 'getData']);
 Route::post('/admin/nghi-phep/create', [NghiPhepController::class, 'store']);
+Route::post("/admin/them-bao-cao-vang", [NghiPhepController::class, "createBaoCaoVang"]);
 Route::post('/admin/nghi-phep/update', [NghiPhepController::class, 'update']);
 Route::delete('/admin/nghi-phep/delete/{id}', [NghiPhepController::class, 'delete']);
 Route::post('/admin/nghi-phep/change-status', [NghiPhepController::class, 'changeStatus']);

@@ -301,26 +301,8 @@ class NghiPhepController extends Controller
     public function getData()
     {
         try {
-            $user_login = Auth::guard('sanctum')->user();
-
-            if (!$user_login) {
-                return response()->json([
-                    'status'    =>  false,
-                    'message'   =>  'Bạn cần đăng nhập để sử dụng chức năng này!'
-                ], 401); // 401 Unauthorized
-            }
-
             $id_chuc_nang = 76;
-            $check = PhanQuyen::where('id_nhan_vien', $user_login->id)
-                              ->where('id_chuc_nang', $id_chuc_nang)
-                              ->first();
-
-            if (!$check) {
-                return response()->json([
-                    'status'    =>  false,
-                    'message'   =>  'Bạn không có quyền sử dụng chức năng này!'
-                ]);
-            }
+            $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
             // Thử chỉ join một bảng
             $data = NghiPhep::leftJoin('loai_vangs', 'nghi_pheps.id_loai_vang', '=', 'loai_vangs.id')
@@ -344,14 +326,7 @@ class NghiPhepController extends Controller
     public function store(Request $request)
     {
         try {
-            $user_login = Auth::guard('sanctum')->user();
 
-            if (!$user_login) {
-                return response()->json([
-                    'status'    =>  false,
-                    'message'   =>  'Bạn cần đăng nhập để sử dụng chức năng này!'
-                ], 401); // 401 Unauthorized
-            }
 
             $id_chuc_nang = 77;
             $check = PhanQuyen::where('id_nhan_vien', $user_login->id)

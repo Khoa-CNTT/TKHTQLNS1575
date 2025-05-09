@@ -16,6 +16,30 @@ use Illuminate\Support\Facades\Log;
 
 class NghiPhepController extends Controller
 {
+    public function changeStatus(Request $request)
+    {
+        $id_chuc_nang = 72;
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
+        $data   = NghiPhep::where('id', $request->id)->first();
+        if($data) {
+            if($data->tinh_trang == 0) {
+                $data->tinh_trang = 1;
+            } else {
+                $data->tinh_trang = 0;
+            }
+            $data->save();
+
+            return response()->json([
+                'status'    =>   true,
+                'message'   =>   'Đã Đổi Trạng Thái Thành Công!',
+            ]);
+        } else {
+            return response()->json([
+                'status'    =>   false,
+                'message'   =>   'Đã Đổi Trạng Thái Thất Bại!'
+            ]);
+        }
+    }
     public function themBaoCaoVang(Request $request)
     {
         $user_login = Auth::guard('sanctum')->user();

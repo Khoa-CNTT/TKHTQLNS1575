@@ -156,6 +156,64 @@ class NghiPhepController extends Controller
             'nghiPhep' => $nghiPhep,
         ], 201);
     }
+    public function createBaoCaoVang(Request $request)
+    {
+        $user_login = Auth::guard('sanctum')->user();
+        if (!$user_login) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Bạn không có quyền truy cập',
+            ], 401);
+        }
+
+
+        $messages = [
+            'id_loai_vang.required' => 'Vui lòng chọn loại vắng',
+            'id_loai_vang.exists' => 'Loại vắng không tồn tại trong hệ thống',
+            'ngay_bat_dau.required' => 'Vui lòng chọn ngày bắt đầu',
+            'ngay_bat_dau.date' => 'Ngày bắt đầu không đúng định dạng',
+            'ngay_ket_thuc.required' => 'Vui lòng chọn ngày kết thúc',
+            'ngay_ket_thuc.date' => 'Ngày kết thúc không đúng định dạng',
+            'ngay_ket_thuc.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu',
+            'ly_do.required' => 'Vui lòng nhập lý do',
+            'ly_do.max' => 'Lý do không được vượt quá 255 ký tự',
+        ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'id_loai_vang' => 'required|exists:loai_vangs,id',
+            'ngay_bat_dau' => 'required|date',
+            'ngay_ket_thuc' => 'required|date|after_or_equal:ngay_bat_dau',
+            'ly_do' => 'required|string|max:255',
+        ], $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'message' => 'Dữ liệu không hợp lệ',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $startDate = new \DateTime($request->ngay_bat_dau);
+        $endDate = new \DateTime($request->ngay_ket_thuc);
+
+        $interval = date_diff($startDate, $endDate);
+
+        $nghiPhep = NghiPhep::create([
+            'id_nhan_vien' => $user_login->id,
+            'id_loai_vang' => $request->id_loai_vang,
+            'ngay_bat_dau' => $request->ngay_bat_dau,
+            'ngay_ket_thuc' => $request->ngay_ket_thuc,
+            'so_ngay_vang' => $interval->days,
+            'ly_do' => $request->ly_do,
+        ]);
+
+        return response()->json([
+            'status' => 201,
+            'message' => 'Thêm thành công',
+            'nghiPhep' => $nghiPhep,
+        ], 201);
+    }
 
 
 

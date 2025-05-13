@@ -10,6 +10,7 @@ use App\Http\Requests\NhanVienChangeStatusRequest;
 use App\Http\Requests\NhanVienCreateRequest;
 use App\Http\Requests\NhanVienDeleteRequest;
 use App\Http\Requests\NhanVienUpdateRequest;
+use App\Http\Requests\ResetMatKhauRequest;
 use App\Mail\QuenMatKhau;
 use App\Models\ChamCong;
 use App\Models\KpiNhanVien;
@@ -29,7 +30,7 @@ use Illuminate\Support\Str;
 
 class NhanVienController extends Controller
 {
-    public function actionLayLaiMatKhau($hash_reset, Request $request)
+    public function actionLayLaiMatKhau($hash_reset, ResetMatKhauRequest  $request)
     {
         $khach_hang = NhanVien::where('hash_reset', $hash_reset)->first();
         if ($khach_hang) {
@@ -70,7 +71,7 @@ class NhanVienController extends Controller
     }
     public function thongTin(){
        $user = Auth::guard('sanctum')->user();
-// o
+
        if ($user && $user instanceof \App\Models\NhanVien) {
             return response()->json([
             'data' => $user

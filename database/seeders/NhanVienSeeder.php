@@ -19,7 +19,7 @@ class NhanVienSeeder extends Seeder
             [
                 'id_phong_ban'   => 1, // Ban Giám Đốc
                 'id_chuc_vu'     => 1, // Giám Đốc
-                'ho_va_ten'      => 'Nguyễn Văn A',
+                'ho_va_ten'      => 'Phạm Thanh Phước',
                 'email'          => 'thanhphuocj3@gmail.com',
                 'password'       => bcrypt('123456'),
                 'ngay_sinh'      => '1980-01-01',

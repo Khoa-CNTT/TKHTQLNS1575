@@ -30,6 +30,19 @@ class ChucVuController extends Controller
             'data' => $data
         ]);
     }
+    public function profilechucvu()
+    {
+        $id_chuc_nang = 11;
+
+        $user_login = Auth::guard('sanctum')->user();
+
+
+        $data = ChucVu::where('id', $user_login->id_chuc_vu)->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 
     public function getDataOpen()
     {

@@ -8,8 +8,10 @@ use App\Models\NghiPhep;
 use App\Models\NhanVien;
 use App\Models\PhanQuyen;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 
@@ -21,13 +23,60 @@ class NghiPhepController extends Controller
         $id_chuc_nang = 72;
         $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data   = NghiPhep::where('id', $request->id)->first();
+
+        $start = Carbon::parse($data->ngay_bat_dau);
+        $end = Carbon::parse($data->ngay_ket_thuc);
+        ChamCong::where('id_nhan_vien', $data->id_nhan_vien)
+                ->whereBetween('ngay_lam_viec', [$start, $end])
+                ->delete();
+        // Tạo danh sách các ngày
+        $period = CarbonPeriod::create($start, $end);
         if($data) {
-            if($data->tinh_trang == 0) {
-                $data->tinh_trang = 1;
-            } else {
-                $data->tinh_trang = 0;
+            if($data->id_loai_vang == 1 && $data->tinh_trang == 0) { // Đi công tác
+                $ca_lam = CaLam::whereIn('id', [1])->get();
+                $dates = [];
+                foreach ($period as $date) {
+                    $dates[] = $date->format('Y-m-d');
+                }
+                $list_ca_lam = [];
+                foreach($dates as $key => $value) {
+                    foreach($ca_lam as $item) {
+                        $list_ca_lam[] = [
+                            'id_nhan_vien'          => $data->id_nhan_vien,
+                            'ngay_lam_viec'         => $value,
+                            'ca_lam'                => $item->id,
+                            'thoi_gian_cham_cong'   => $value . ' ' . $item->gio_vao,
+                            'trang_thai'            => 0, // 0: Đúng Giờ, 1: Sai giờ
+                            'type'                  => 0,
+                        ];
+                        $list_ca_lam[] = [
+                            'id_nhan_vien'          => $data->id_nhan_vien,
+                            'ngay_lam_viec'         => $value,
+                            'ca_lam'                => $item->id,
+                            'thoi_gian_cham_cong'   => $value . ' ' . $item->gio_ra,
+                            'trang_thai'            => 0, // 0: Đúng Giờ, 1: Sai giờ
+                            'type'                  => 1,
+                        ];
+                    }
+                }
+
+                DB::table('cham_congs')->insert($list_ca_lam);
+                if($data->tinh_trang == 0) {
+                    $data->tinh_trang = 1;
+                } else {
+                    $data->tinh_trang = 0;
+                }
+                $data->save();
+            }else{
+                if($data->tinh_trang == 0) {
+                    $data->tinh_trang = 1;
+                } else {
+                    $data->tinh_trang = 0;
+                }
+                $data->save();
             }
-            $data->save();
+
+
 
             return response()->json([
                 'status'    =>   true,
@@ -146,8 +195,8 @@ class NghiPhepController extends Controller
             'id_loai_vang' => $request->id_loai_vang,
             'ngay_bat_dau' => $request->ngay_bat_dau,
             'ngay_ket_thuc' => $request->ngay_ket_thuc,
-            'so_ngay_vang' => $interval->days,
-            'ly_do' => $request->ly_do,
+            'so_ngay_vang' => $interval->days == $request->so_ngay_vang +1,
+            'ly_do' => $request->ly_do,151
         ]);
 
         return response()->json([

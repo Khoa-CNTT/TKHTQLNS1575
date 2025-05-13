@@ -17,30 +17,18 @@ class LoaiVangSeeder extends Seeder
         DB::table('loai_vangs')->truncate();
         DB::table('loai_vangs')->insert([
             [
+                'id' => 1,
                 'ten_loai_vang' => 'Báo cáo vắng đi công tác',
                 'diem_duoc_cham' => 0,
                 'tinh_trang' => 1,
             ],
             [
-                'ten_loai_vang' => 'Nghỉ bệnh đâu ốm',
+                'id' => 2,
+                'ten_loai_vang' => 'Yêu Cầu Nghĩ Phép',
                 'diem_duoc_cham' => 5,
                 'tinh_trang' => 1,
             ],
-            [
-                'ten_loai_vang' => 'Đi muộn',
-                'diem_duoc_cham' => 2,
-                'tinh_trang' => 0,
-            ],
-            [
-                'ten_loai_vang' => 'Về sớm',
-                'diem_duoc_cham' => 2,
-                'tinh_trang' => 0,
-            ],
-            [
-                'ten_loai_vang' => 'Việc gia đình',
-                'diem_duoc_cham' => 10,
-                'tinh_trang' => 0,
-            ],
+
         ]);
     }
 }

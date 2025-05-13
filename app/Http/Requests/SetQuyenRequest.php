@@ -22,7 +22,7 @@ class SetQuyenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_nhan_vien'  =>  'required|exists:nhan_viens,id',
+            'id_chuc_vu'  =>  'required|exists:chuc_vus,id',
             'id'            =>  'required|exists:chuc_nangs,id',
         ];
     }
@@ -30,8 +30,8 @@ class SetQuyenRequest extends FormRequest
     public function messages()
     {
         return [
-            'id_nhan_vien.required' => 'Nhân viên được không được để trống',
-            'id_nhan_vien.exists'   => 'Nhân viên này không tồn tại trong hệ thống',
+            'id_chuc_vu.required' => 'Nhân viên được không được để trống',
+            'id_chuc_vu.exists'   => 'Nhân viên này không tồn tại trong hệ thống',
             'id.required'           => 'Chức năng không được để trống',
             'id.exists'             => 'Chức năng này không tồn tại trong hệ thống',
         ];

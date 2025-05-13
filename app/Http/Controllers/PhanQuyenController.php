@@ -15,11 +15,11 @@ class PhanQuyenController extends Controller
     public function getListChucNang(Request $request)
     {
         $id_chuc_nang = 71;
-$user_login = $this->checkPhanQuyen($id_chuc_nang);
+     $user_login = $this->checkPhanQuyen($id_chuc_nang);
 
         $data = ChucNang::get();
 
-        $phanQuyen = PhanQuyen::select('id', 'id_chuc_nang')->where('id_nhan_vien', $request->id)->get();
+        $phanQuyen = PhanQuyen::select('id', 'id_chuc_nang')->where('id_chuc_vu', $request->id)->get();
 
         foreach ($data as $k => $v) {
             $v->is_phan_quyen = 0;
@@ -36,12 +36,12 @@ $user_login = $this->checkPhanQuyen($id_chuc_nang);
         ]);
     }
 
-    public function setQuyen(SetQuyenRequest $request)
+    public function setQuyen(Request $request)
     {
         $id_chuc_nang = 72;
-$user_login = $this->checkPhanQuyen($id_chuc_nang);
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhanQuyen::FirstOrCreate([
-            'id_nhan_vien'  =>  $request->id_nhan_vien,
+            'id_chuc_vu'  =>  $request->id_chuc_vu,
             'id_chuc_nang'  =>  $request->id,
         ]);
         // Lưu log

@@ -43,6 +43,7 @@ Route::post('/admin/update-thong-tin', [NhanVienController::class, 'updateThongT
 Route::post('/admin/update-mat-khau', [NhanVienController::class, 'updateMatKhau']);
 Route::post('/admin/quen-mat-khau', [NhanVienController::class, 'actionQuenmatKhau']);
 Route::post('/admin/lay-lai-mat-khau/{hash_reset}', [NhanVienController::class, 'actionLayLaiMatKhau']);
+Route::get('/admin/chuc-vu/data-profile', [ChucVuController::class, 'profilechucvu']);
 
 
 Route::get('/admin/chuc-vu/data', [ChucVuController::class, 'getData']);
@@ -139,7 +140,6 @@ Route::post("/admin/trang-thai-tu-choi", [NghiPhepController::class, "trangThaiT
 Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamCongNtf']);
 
 Route::get('/admin/nghi-phep/data', [NghiPhepController::class, 'getData']);
-Route::post('/admin/nghi-phep/create', [NghiPhepController::class, 'store']);
 Route::post("/admin/them-bao-cao-vang", [NghiPhepController::class, "createBaoCaoVang"]);
 Route::post('/admin/nghi-phep/update', [NghiPhepController::class, 'update']);
 Route::delete('/admin/nghi-phep/delete/{id}', [NghiPhepController::class, 'delete']);

@@ -38,12 +38,12 @@ class NhanVienController extends Controller
             $khach_hang->hash_reset = null;
             $khach_hang->save();
             return response()->json([
-                'status' => true,
+                'status' => 1,
                 'message' => "Mật khẩu đã được thay đổi"
             ]);
         } else {
             return response()->json([
-                'status' => false,
+                'status' => 0,
                 'message' => "Đã có lỗi xảy ra!"
             ]);
         }
@@ -114,12 +114,12 @@ class NhanVienController extends Controller
                 'password'             => bcrypt($request->password),
             ]);
             return response()->json([
-                'status' => true,
+                'status' => 1,
                 'message' => "Bạn đã cập nhật mật khẩu thành công!"
             ]);
         } else {
             return response()->json([
-                'status' => false,
+                'status' => 0,
                 'message' => "Có lỗi xảy ra!"
             ]);
         }

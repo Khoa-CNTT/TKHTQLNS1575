@@ -38,10 +38,11 @@ class PhanQuyenController extends Controller
 
     public function setQuyen(Request $request)
     {
+        // return response()->json($request->all());
         $id_chuc_nang = 72;
         $user_login = $this->checkPhanQuyen($id_chuc_nang);
         PhanQuyen::FirstOrCreate([
-            'id_chuc_vu'  =>  $request->id_chuc_vu,
+            'id_chuc_vu'  =>  $request->id_nhan_vien,
             'id_chuc_nang'  =>  $request->id,
         ]);
         // Lưu log

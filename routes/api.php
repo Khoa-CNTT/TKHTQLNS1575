@@ -139,10 +139,7 @@ Route::post("/admin/trang-thai-chap-nhan", [NghiPhepController::class, "trangTha
 Route::post("/admin/trang-thai-tu-choi", [NghiPhepController::class, "trangThaiTuChoi"]);
 Route::get('/admin/cham-cong-ntf/{id}', [ChamCongController::class, 'actionChamCongNtf']);
 
-Route::get('/admin/nghi-phep/data', [NghiPhepController::class, 'getData']);
 Route::post("/admin/them-bao-cao-vang", [NghiPhepController::class, "createBaoCaoVang"]);
-Route::post('/admin/nghi-phep/update', [NghiPhepController::class, 'update']);
-Route::delete('/admin/nghi-phep/delete/{id}', [NghiPhepController::class, 'delete']);
 Route::post('/admin/nghi-phep/change-status', [NghiPhepController::class, 'changeStatus']);
 
 Route::get('/get-ip', [ConfigController::class, 'configIP']);

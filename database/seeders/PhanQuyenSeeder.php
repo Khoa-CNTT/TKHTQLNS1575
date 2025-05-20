@@ -95,6 +95,7 @@ class PhanQuyenSeeder extends Seeder
             ['id_chuc_nang' => 77, 'id_chuc_vu' => 1],
             ['id_chuc_nang' => 78, 'id_chuc_vu' => 1],
             ['id_chuc_nang' => 79, 'id_chuc_vu' => 1],
+            ['id_chuc_nang' => 80, 'id_chuc_vu' => 1],
         ]);
     }
 }

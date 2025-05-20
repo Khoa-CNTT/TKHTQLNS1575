@@ -20,8 +20,8 @@ class NghiPhepController extends Controller
 {
     public function changeStatus(Request $request)
     {
-        // $id_chuc_nang = 72;
-        // $user_login = $this->checkPhanQuyen($id_chuc_nang);
+        $id_chuc_nang = 80;
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
         $data   = NghiPhep::where('id', $request->id)->first();
 
         $start = Carbon::parse($data->ngay_bat_dau);
@@ -88,6 +88,76 @@ class NghiPhepController extends Controller
                 'message'   =>   'Đã Đổi Trạng Thái Thất Bại!'
             ]);
         }
+    }
+    public function getBaoCaoVangNV(Request $request)
+    {
+        $id_chuc_nang = 76;
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
+        if (!$user_login) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Bạn không có quyền truy cập',
+            ], 401);
+        }
+
+        $query = NghiPhep::query()
+            ->join('loai_vangs', 'nghi_pheps.id_loai_vang', '=', 'loai_vangs.id')
+            ->join('nhan_viens', 'nghi_pheps.id_nhan_vien', '=', 'nhan_viens.id');
+
+        // Filter by id_nhan_vien if provided
+        if ($request->filled('id_nhan_vien')) {
+            $query->where('nghi_pheps.id_nhan_vien', $request->id_nhan_vien);
+        }
+
+        // Filter by id_loai_vang if provided
+        if ($request->filled('id_loai_vang')) {
+            $query->where('nghi_pheps.id_loai_vang', $request->id_loai_vang);
+        }
+
+        // Filter by date range
+        if ($request->filled('tu_ngay') && $request->filled('den_ngay')) {
+            $query->where(function ($q) use ($request) {
+                $q->whereBetween('nghi_pheps.ngay_bat_dau', [$request->tu_ngay, $request->den_ngay])
+                    ->orWhereBetween('nghi_pheps.ngay_ket_thuc', [$request->tu_ngay, $request->den_ngay])
+                    ->orWhere(function ($sub) use ($request) {
+                        $sub->where('nghi_pheps.ngay_bat_dau', '<=', $request->tu_ngay)
+                            ->where('nghi_pheps.ngay_ket_thuc', '>=', $request->den_ngay);
+                    });
+            });
+        } else {
+            if ($request->filled('ngay_bat_dau')) {
+                $query->whereDate('nghi_pheps.ngay_bat_dau', '>=', $request->ngay_bat_dau);
+            }
+
+            if ($request->filled('ngay_ket_thuc')) {
+                $query->whereDate('nghi_pheps.ngay_ket_thuc', '<=', $request->ngay_ket_thuc);
+            }
+        }
+
+        // Filter by tinh_trang if provided
+        if ($request->filled('tinh_trang')) {
+            $query->where('nghi_pheps.tinh_trang', $request->tinh_trang);
+        }
+
+        // Select fields explicitly
+        $nghiPhep = $query->select(
+            'nghi_pheps.*',
+            'loai_vangs.ten_loai_vang',
+            'nhan_viens.ho_va_ten'
+        )->where('nghi_pheps.id_nhan_vien', $user_login->id)
+            ->get();
+
+        if (!$nghiPhep) {
+            return response()->json([
+                'status' => 200,
+                'nghiPhep' => []
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'nghiPhep' => $nghiPhep,
+        ]);
     }
     public function themBaoCaoVang(Request $request)
     {
@@ -207,7 +277,8 @@ class NghiPhepController extends Controller
     }
     public function createBaoCaoVang(Request $request)
     {
-        $user_login = Auth::guard('sanctum')->user();
+        $id_chuc_nang = 77;
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
         if (!$user_login) {
             return response()->json([
                 'status' => 401,
@@ -337,6 +408,41 @@ class NghiPhepController extends Controller
     }
     public function suaBaoCaoVang(Request $request)
     {
+        $id_chuc_nang = 78;
+        $user_login = $this->checkPhanQuyen($id_chuc_nang);
+        if (!$user_login) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Bạn không có quyền truy cập',
+            ], 401);
+        }
+        $nghiPhep = NghiPhep::find($request->id);
+        if (!$nghiPhep) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Không tìm thấy báo cáo nghỉ phép',
+            ], 404);
+        }
+        $startDate = new \DateTime($request->ngay_bat_dau);
+        $endDate = new \DateTime($request->ngay_ket_thuc);
+
+        $interval = date_diff($startDate, $endDate);
+        $nghiPhep->update([
+            'id_nhan_vien' => $request->id_nhan_vien,
+            'id_loai_vang' => $request->id_loai_vang,
+            'ngay_bat_dau' => $request->ngay_bat_dau,
+            'ngay_ket_thuc' => $request->ngay_ket_thuc,
+            'so_ngay_vang' => $interval->days,
+            'ly_do' => $request->ly_do,
+        ]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sửa thành công',
+            'nghiPhep' => $nghiPhep,
+        ], 200);
+    }
+    public function suaBaoCaoVangNV(Request $request)
+    {
         $user_login = Auth::guard('sanctum')->user();
         if (!$user_login) {
             return response()->json([
@@ -371,6 +477,29 @@ class NghiPhepController extends Controller
     }
 
     public function xoaBaoCaoVang($id)
+    {
+        $id_chuc_nang = 79;
+       $user_login = $this->checkPhanQuyen($id_chuc_nang);
+        if (!$user_login) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Bạn không có quyền truy cập',
+            ], 401);
+        }
+        $nghiPhep = NghiPhep::find($id);
+        if (!$nghiPhep) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Không tìm thấy báo cáo nghỉ phép',
+            ], 404);
+        }
+        $nghiPhep->delete();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Xóa thành công',
+        ]);
+    }
+    public function xoaBaoCaoVangNV($id)
     {
         $user_login = Auth::guard('sanctum')->user();
         if (!$user_login) {
@@ -541,11 +670,6 @@ class NghiPhepController extends Controller
                     'message'   =>  'Bạn cần đăng nhập để sử dụng chức năng này!'
                 ], 401); // 401 Unauthorized
             }
-
-
-
-
-
             $nghi_phep = NghiPhep::find($request->id);
             if (!$nghi_phep) {
                 return response()->json([

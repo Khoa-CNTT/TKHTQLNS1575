@@ -95,6 +95,11 @@ class ChucNangSeeder extends Seeder
             ['id' => 77, 'ten_chuc_nang' => 'Tạo mới nghỉ phép'],
             ['id' => 78, 'ten_chuc_nang' => 'Cập nhật nghỉ phép'],
             ['id' => 79, 'ten_chuc_nang' => 'Xóa nghỉ phép'],
+            ['id' => 80, 'ten_chuc_nang' => 'Xác nhận nghỉ phép'],
+            // ['id' => 81, 'ten_chuc_nang' => 'Thêm mới nghĩ phép/báo cáo vắng đi công tác'],
+            // ['id' => 82, 'ten_chuc_nang' => 'Xem danh sách nghĩ phép'],
+            // ['id' => 83, 'ten_chuc_nang' => 'Sửa nghĩ phép'],
+            // ['id' => 84, 'ten_chuc_nang' => 'Xóa nghĩ phép'],
             //['id' => 80, 'ten_chuc_nang' => 'Xuất file excel nghỉ phép'],
         ]);
     }

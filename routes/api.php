@@ -131,9 +131,12 @@ Route::delete('/admin/xoa-loai-vang/{id}', [LoaiVangController::class, 'xoaLoaiV
 
 
 Route::post("/admin/them-bao-cao-vang-di-cong-tac", [NghiPhepController::class, "themBaoCaoVangDiCongTac"]);
-Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang"]);
+Route::get("/nhan-vien/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang"]);
+Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVangNV"]);
 Route::put("/admin/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVang"]);
+Route::put("/nhan-vien/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVangNV  "]);
 Route::delete('/admin/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVang']);
+Route::delete('/nhan-vien/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVangNV']);
 Route::get('/admin/bao-cao-vang/xuat-excel', [NghiPhepController::class, 'xuatExcel']);
 Route::post("/admin/trang-thai-chap-nhan", [NghiPhepController::class, "trangThaiChapNhan"]);
 Route::post("/admin/trang-thai-tu-choi", [NghiPhepController::class, "trangThaiTuChoi"]);

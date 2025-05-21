@@ -64,6 +64,7 @@ class ChucVuController extends Controller
         ChucVu::create([
             'ten_chuc_vu'   => $request->ten_chuc_vu,
             'tinh_trang'    => $request->tinh_trang,
+            'id_chuc_vu_cha' => $request->id_chuc_vu_cha
         ]);
 
         // Lưu log
@@ -113,6 +114,7 @@ class ChucVuController extends Controller
         ChucVu::where('id', $request->id)->update([
             'ten_chuc_vu'   => $request->ten_chuc_vu,
             'tinh_trang'    => $request->tinh_trang,
+            'id_chuc_vu_cha' => $request->id_chuc_vu_cha
         ]);
 
         // Lưu log

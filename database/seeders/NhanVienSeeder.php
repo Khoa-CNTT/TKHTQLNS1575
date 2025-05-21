@@ -24,7 +24,7 @@ class NhanVienSeeder extends Seeder
                 'password'       => bcrypt('123456'),
                 'ngay_sinh'      => '1980-01-01',
                 'dia_chi'        => '123 Nguyễn Trãi, Hà Nội',
-                'so_dien_thoai'  => '0123456789',
+                'so_dien_thoai'  => '0347941497',
                 'is_block'       => 0,
                 'is_master'      => 1,
                 'luong_co_ban'   => 20000000, // Thêm lương cơ bản
@@ -32,7 +32,7 @@ class NhanVienSeeder extends Seeder
             [
                 'id_phong_ban'   => 1, // Ban Giám Đốc
                 'id_chuc_vu'     => 2, // Phó Giám Đốc
-                'ho_va_ten'      => 'Trần Thị B',
+                'ho_va_ten'      => 'Nguyễn Xuân Tiến',
                 'email'          => 'tranthib@example.com',
                 'password'       => bcrypt('123456'),
                 'ngay_sinh'      => '1985-05-15',
@@ -45,7 +45,7 @@ class NhanVienSeeder extends Seeder
             [
                 'id_phong_ban'   => 3, // Ban Maketing
                 'id_chuc_vu'     => 3, // Trưởng Phòng
-                'ho_va_ten'      => 'Lê Văn E',
+                'ho_va_ten'      => 'Huỳnh Trần Nhật Hoàng',
                 'email'          => 'levane@example.com',
                 'password'       => bcrypt('123456'),
                 'ngay_sinh'      => '1990-03-22',
@@ -56,9 +56,9 @@ class NhanVienSeeder extends Seeder
                 'luong_co_ban'   => 15000000, // Thêm lương cơ bản
             ],
             [
-                'id_phong_ban'   => 3, // Ban Tài Chính
+                'id_phong_ban'   => 2, // Ban Tài Chính
                 'id_chuc_vu'     => 6, // Trưởng Phòng
-                'ho_va_ten'      => 'Lê Văn C',
+                'ho_va_ten'      => 'Trần Văn Cảnh',
                 'email'          => 'levanc@example.com',
                 'password'       => bcrypt('123456'),
                 'ngay_sinh'      => '1990-03-22',
@@ -69,9 +69,9 @@ class NhanVienSeeder extends Seeder
                 'luong_co_ban'   => 15000000, // Thêm lương cơ bản
             ],
             [
-                'id_phong_ban'   => 4, // Ban Developer
+                'id_phong_ban'   => 2, // Ban Developer
                 'id_chuc_vu'     => 4, // Nhân Viên
-                'ho_va_ten'      => 'Phạm Văn D',
+                'ho_va_ten'      => 'Lê Trần Thái Tuyên',
                 'email'          => 'phamvand@example.com',
                 'password'       => bcrypt('123456'),
                 'ngay_sinh'      => '1992-08-10',
@@ -81,6 +81,7 @@ class NhanVienSeeder extends Seeder
                 'is_master'      => 0,
                 'luong_co_ban'   => 12000000, // Thêm lương cơ bản
             ],
+
         ]);
     }
 }

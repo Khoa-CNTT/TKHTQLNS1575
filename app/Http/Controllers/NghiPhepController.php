@@ -66,6 +66,7 @@ class NghiPhepController extends Controller
                     $data->nguoi_phe_diet = $user_login->ho_va_ten;
                 } else {
                     $data->tinh_trang = 0;
+                    $data->nguoi_phe_diet = null;
                 }
                 $data->save();
             }else{
@@ -74,6 +75,7 @@ class NghiPhepController extends Controller
                     $data->nguoi_phe_diet = $user_login->ho_va_ten;
                 } else {
                     $data->tinh_trang = 0;
+                    $data->nguoi_phe_diet = null;
                 }
                 $data->save();
             }

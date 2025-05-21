@@ -34,23 +34,24 @@ class ChucVuseeding extends Seeder
                 'tinh_trang'            => 1,
                 'id_chuc_vu_cha'        => 2,
             ],
+
             [
                 'id'                    => 4,
-                'ten_chuc_vu'           => 'Nhân Viên',
-                'tinh_trang'            => 0,
-                'id_chuc_vu_cha'        => 3,
+                'ten_chuc_vu'           => 'Trường Phòng Marketing',
+                'tinh_trang'            => 1,
+                'id_chuc_vu_cha'        => 2,
             ],
             [
                 'id'                    => 5,
-                'ten_chuc_vu'           => 'Leader Nhóm',
-                'tinh_trang'            => 0,
+                'ten_chuc_vu'           => 'Nhân Viên Tài Chính',
+                'tinh_trang'            => 1,
                 'id_chuc_vu_cha'        => 3,
             ],
             [
                 'id'                    => 6,
-                'ten_chuc_vu'           => 'Trường Phòng Marketing',
+                'ten_chuc_vu'           => 'Nhân Viên marketing',
                 'tinh_trang'            => 1,
-                'id_chuc_vu_cha'        => 2,
+                'id_chuc_vu_cha'        => 3,
             ],
         ]);
     }

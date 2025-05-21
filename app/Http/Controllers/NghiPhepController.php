@@ -63,6 +63,7 @@ class NghiPhepController extends Controller
                 DB::table('cham_congs')->insert($list_ca_lam);
                 if($data->tinh_trang == 0) {
                     $data->tinh_trang = 1;
+                    $data->nguoi_phe_diet = $user_login->ho_va_ten;
                 } else {
                     $data->tinh_trang = 0;
                 }
@@ -70,6 +71,7 @@ class NghiPhepController extends Controller
             }else{
                 if($data->tinh_trang == 0) {
                     $data->tinh_trang = 1;
+                    $data->nguoi_phe_diet = $user_login->ho_va_ten;
                 } else {
                     $data->tinh_trang = 0;
                 }

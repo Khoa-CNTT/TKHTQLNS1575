@@ -134,7 +134,7 @@ Route::post("/admin/them-bao-cao-vang-di-cong-tac", [NghiPhepController::class, 
 Route::get("/nhan-vien/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVang"]);
 Route::get("/admin/get-bao-cao-vang", [NghiPhepController::class, "getBaoCaoVangNV"]);
 Route::put("/admin/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVang"]);
-Route::put("/nhan-vien/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVangNV  "]);
+Route::put("/nhan-vien/sua-bao-cao-vang", [NghiPhepController::class, "suaBaoCaoVangNV"]);
 Route::delete('/admin/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVang']);
 Route::delete('/nhan-vien/xoa-bao-cao-vang/{id}', [NghiPhepController::class, 'xoaBaoCaoVangNV']);
 Route::get('/admin/bao-cao-vang/xuat-excel', [NghiPhepController::class, 'xuatExcel']);
